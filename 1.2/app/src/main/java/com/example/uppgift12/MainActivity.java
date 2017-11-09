@@ -3,39 +3,37 @@ package com.example.uppgift12;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Time> alarmTimes = new ArrayList<>();
-    private ArrayAdapter<Time> alarmTimesAdapter;
+    private AlarmListAdapter alarmTimesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        ListView todoList = (ListView) findViewById(R.id.todo_list);
-        alarmTimesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, alarmTimes);
-        todoList.setAdapter(alarmTimesAdapter);
+        ListView alarmList = findViewById(R.id.alarm_list);
+        alarmTimesAdapter = new AlarmListAdapter();
+        alarmList.setAdapter(alarmTimesAdapter);
     }
 
     /**
-     * Called when the floating action button is pressed
+     * Called when the floating action button is pressed, spawns a time-picker
      */
     public void fabClick(View view) {
         TimePickerDialog.OnTimeSetListener setListener = new TimePickerDialog.OnTimeSetListener() {
@@ -43,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
                 alarmTimes.add(new Time(i, i1));
                 alarmTimesAdapter.notifyDataSetChanged();
-                Log.v("Main", alarmTimes.toString());
             }
         };
 
@@ -74,21 +71,42 @@ public class MainActivity extends AppCompatActivity {
     private class Time {
         private int hour, minute;
 
-        public Time(int hour, int minute) {
+        Time(int hour, int minute) {
             this.hour = hour;
             this.minute = minute;
         }
 
-        public int getHour() {
-            return hour;
-        }
-
-        public int getMinute() {
-            return minute;
-        }
-
         public String toString() {
-            return hour + ":" + minute;
+            return String.format("%02d:%02d", hour, minute);
+        }
+    }
+
+    /**
+     * list adapter for alarms
+     */
+    private class AlarmListAdapter extends BaseAdapter {
+        @Override
+        public int getCount() {
+            return alarmTimes.size();
+        }
+
+        @Override
+        public Time getItem(int i) {
+            return alarmTimes.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            if (view == null) {
+                view = getLayoutInflater().inflate(R.layout.alarm_list_item, viewGroup, false);
+            }
+            ((TextView) view.findViewById(R.id.time_tw)).setText(getItem(i).toString());
+            return view;
         }
     }
 }
