@@ -1,6 +1,4 @@
 <resources>
     <string name="app_name">Uppgift1.2 (fake alarm app)</string>
-    <string name="edit_message">Enter a message</string>
-    <string name="button_send">Send</string>
     <string name="title_activity_main2">Main2Activity</string>
 </resources>
