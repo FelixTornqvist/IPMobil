@@ -29,8 +29,8 @@
         app:srcCompat="@drawable/ic_add_white"
         android:onClick="fabClick"/>
 
-    <ListView
-        android:id="@+id/alarm_list"
+    <fragment android:name="com.example.uppgift12.AlarmListFragment"
+        android:id="@+id/list_fragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

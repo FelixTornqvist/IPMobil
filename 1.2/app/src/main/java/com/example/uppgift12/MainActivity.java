@@ -6,30 +6,39 @@ import android.app.TimePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    static final String STATE_ALARM_TIMES = "alarmTimes";
     private ArrayList<Time> alarmTimes = new ArrayList<>();
-    private AlarmListAdapter alarmTimesAdapter;
+    AlarmListFragment listFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(savedInstanceState != null) {
+            Log.v("Main", "no saved instance");
+            alarmTimes = savedInstanceState.getParcelableArrayList(STATE_ALARM_TIMES);
+        }
+
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        ListView alarmList = findViewById(R.id.alarm_list);
-        alarmTimesAdapter = new AlarmListAdapter();
-        alarmList.setAdapter(alarmTimesAdapter);
+        listFrag = (AlarmListFragment) getFragmentManager().findFragmentById(R.id.list_fragment);
+        listFrag.setAlarmTimesList(alarmTimes);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.v("Main", "Saving instance");
+        savedInstanceState.putParcelableArrayList(STATE_ALARM_TIMES, alarmTimes);
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     /**
@@ -40,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
                 alarmTimes.add(new Time(i, i1));
-                alarmTimesAdapter.notifyDataSetChanged();
+                listFrag.notifyDataSetChanged();
             }
         };
 
@@ -65,48 +74,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Used to neatly store hour and minute together.
-     */
-    private class Time {
-        private int hour, minute;
-
-        Time(int hour, int minute) {
-            this.hour = hour;
-            this.minute = minute;
-        }
-
-        public String toString() {
-            return String.format("%02d:%02d", hour, minute);
-        }
-    }
-
-    /**
-     * list adapter for alarms
-     */
-    private class AlarmListAdapter extends BaseAdapter {
-        @Override
-        public int getCount() {
-            return alarmTimes.size();
-        }
-
-        @Override
-        public Time getItem(int i) {
-            return alarmTimes.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = getLayoutInflater().inflate(R.layout.alarm_list_item, viewGroup, false);
-            }
-            ((TextView) view.findViewById(R.id.time_tw)).setText(getItem(i).toString());
-            return view;
-        }
-    }
 }
