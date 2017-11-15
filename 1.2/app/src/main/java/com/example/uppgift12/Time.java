@@ -9,7 +9,7 @@ import android.os.Parcelable;
 public class Time implements Parcelable {
     private int hour, minute;
 
-    Time(int hour, int minute) {
+    public Time(int hour, int minute) {
         this.hour = hour;
         this.minute = minute;
     }

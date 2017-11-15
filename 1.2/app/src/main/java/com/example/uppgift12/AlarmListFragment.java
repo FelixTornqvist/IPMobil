@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -37,7 +40,6 @@ public class AlarmListFragment extends Fragment {
 
     @Override
     public void onPause() {
-
         super.onPause();
     }
 
@@ -80,6 +82,12 @@ public class AlarmListFragment extends Fragment {
                 view = getActivity().getLayoutInflater().inflate(R.layout.alarm_list_item, viewGroup, false);
             }
             ((TextView) view.findViewById(R.id.time_tw)).setText(getItem(i).toString());
+            ((Switch) view.findViewById(R.id.switch1)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    Toast.makeText(getActivity(), "This is a fake alarm app..", Toast.LENGTH_SHORT).show();
+                }
+            });
             return view;
         }
     }

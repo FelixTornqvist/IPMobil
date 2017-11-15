@@ -6,7 +6,6 @@ import android.app.TimePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TimePicker;
 
@@ -23,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if(savedInstanceState != null) {
-            Log.v("Main", "no saved instance");
             alarmTimes = savedInstanceState.getParcelableArrayList(STATE_ALARM_TIMES);
         }
 
@@ -36,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        Log.v("Main", "Saving instance");
         savedInstanceState.putParcelableArrayList(STATE_ALARM_TIMES, alarmTimes);
         super.onSaveInstanceState(savedInstanceState);
     }
