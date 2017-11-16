@@ -1,0 +1,4 @@
+android-IPMobil.jks 
+Store pass: ThisIsNotAVerySafeStorePassword
+
+IPMobil (key) Pass: ThisIsNotAVerySafeKeyPassword

@@ -1,0 +1,22 @@
+1. Build > Generate Signed APK
+2. Click "Create new..." button as I had no previous keys.
+3. Enter key store path (where to save the key store), I chose "/home/felix/keystores/android-IPMobil.jks"
+4. Enter and confirm a password for the keystore
+5. Enter name (Alias) for the key, I named it "IPMobil"
+6. Enter and confirm password for the key
+7. Set Validity (years) to at least 25 (this is how long the key will be valid)
+8. Enter following:
+	First and Last name:		Felix Törnqvist
+	Organizational Unit:		DSV
+	Organization:				Stockholm University
+	City of Locality:			Märsta
+	State or Province:			Uppland
+	Country Code:				SE
+9. Click OK button
+10. Make sure that the correct keystore and key is selected and that the passwords are typed in (should be after creation).
+11. click Next button
+12. Specify APK destination folder and build type (default should be fine)
+13. Check both signature verions; "V1 (Jar Signature)" and "V2 (Full APK Signature)".
+13. Click Finish button
+
+the APK should be located in the app/release/ folder inside your project folder
