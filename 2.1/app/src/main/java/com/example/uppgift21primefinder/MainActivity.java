@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+/**
+ * Calculates prime numbers in increasing order, saves the progress when activity ends.
+ */
 public class MainActivity extends AppCompatActivity {
     private final String LARGEST_PRIME_PREF = "largestPrime", CURR_COUNT_PREF = "currentCount";
     private TextView largestPrimeTW, currCountTW;
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Save current numbers for next startup
+     * Saves current numbers for next startup
      */
     @Override
     protected void onStop() {
@@ -51,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    /**
+     * Calculates prime numbers in its own thread and updates the TextViews with the new values.
+     */
     private class PrimeCalc extends Thread {
         private boolean run = true;
         private long largestPrime, currNum;
@@ -71,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        /**
+         * Update textview with a new number
+         */
         private void updateText(final TextView tw, final long num) {
             tw.post(new Runnable() {
                 public void run() {
@@ -79,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        /**
+         * Checks if a number is prime
+         */
         private boolean isPrime(long candidate) {
             long sqrt = (long) Math.sqrt(candidate);
             for (long i = 3; i <= sqrt; i += 2)
