@@ -7,12 +7,44 @@
     tools:context="com.example.uppgift21primefinder.MainActivity">
 
     <TextView
+        android:id="@+id/largest_prime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/largest_prime_label"
+        app:layout_constraintTop_toBottomOf="@+id/largest_prime_label" />
+
+    <TextView
+        android:id="@+id/current_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/current_count_label"
+        app:layout_constraintTop_toBottomOf="@+id/current_count_label" />
+
+    <TextView
+        android:id="@+id/largest_prime_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/largest_prime"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/current_count_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/curr_count"
+        app:layout_constraintStart_toStartOf="@+id/largest_prime_label"
+        app:layout_constraintTop_toBottomOf="@+id/largest_prime" />
 
 </android.support.constraint.ConstraintLayout>
