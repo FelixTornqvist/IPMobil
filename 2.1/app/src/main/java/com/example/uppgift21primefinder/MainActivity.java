@@ -1,13 +1,15 @@
 package com.example.uppgift21primefinder;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    TextView largestPrimeTW, currCountTW;
-    PrimeCalc primeCalc;
+    private final String LARGEST_PRIME_PREF = "largestPrime", CURR_COUNT_PREF = "currentCount";
+    private TextView largestPrimeTW, currCountTW;
+    private PrimeCalc primeCalc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,22 +22,37 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        primeCalc = new PrimeCalc(999999999);
-        new Thread(primeCalc).start();
+        SharedPreferences settings = getPreferences(MODE_PRIVATE);
+        long largestPrime = settings.getLong(LARGEST_PRIME_PREF, 0);
+        long currentCount = settings.getLong(CURR_COUNT_PREF, 0);
+
+        largestPrimeTW.setText(Long.toString(largestPrime));
+        currCountTW.setText(Long.toString(currentCount));
+
+        primeCalc = new PrimeCalc(currentCount);
+        primeCalc.start();
         super.onResume();
     }
 
     /**
-     * Save current number for next startup
+     * Save current numbers for next startup
      */
     @Override
     protected void onStop() {
         primeCalc.stopLoop();
+        while (primeCalc.isAlive()); // to make sure that the variables won't change while saving them
+
+        SharedPreferences settings = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong(LARGEST_PRIME_PREF, primeCalc.getLargestPrime());
+        editor.putLong(CURR_COUNT_PREF, primeCalc.getCurrNum());
+        editor.commit();
+
         super.onStop();
     }
 
-    private class PrimeCalc implements Runnable {
-        private boolean running = true;
+    private class PrimeCalc extends Thread {
+        private boolean run = true;
         private long largestPrime, currNum;
 
         PrimeCalc(long startNum) {
@@ -44,19 +61,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            while (running) {
+            while (run) {
                 if (isPrime(currNum)) {
                     largestPrime = currNum;
                     updateText(largestPrimeTW, largestPrime);
                 }
                 updateText(currCountTW, currNum);
                 currNum++;
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         }
 
@@ -87,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
          * lets the run loop terminate on its own, as Thread.stop() is deprecated
          */
         void stopLoop() {
-            running = false;
+            run = false;
         }
     }
 
