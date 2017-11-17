@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 /**
@@ -12,6 +13,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
     private final String LARGEST_PRIME_PREF = "largestPrime", CURR_COUNT_PREF = "currentCount";
     private TextView largestPrimeTW, currCountTW;
+    private TextView calcFreqTW;
     private PrimeCalc primeCalc;
 
     @Override
@@ -21,10 +23,13 @@ public class MainActivity extends AppCompatActivity {
 
         largestPrimeTW = findViewById(R.id.largest_prime);
         currCountTW = findViewById(R.id.current_count);
+        calcFreqTW = findViewById(R.id.calc_freq_number);
     }
 
-    @Override
-    protected void onResume() {
+    /**
+     * Initializes PrimeCalc with numbers from last time
+     */
+    private void initPrimeCalc() {
         SharedPreferences settings = getPreferences(MODE_PRIVATE);
         long largestPrime = settings.getLong(LARGEST_PRIME_PREF, 3);
         long currentCount = settings.getLong(CURR_COUNT_PREF, 3);
@@ -35,10 +40,36 @@ public class MainActivity extends AppCompatActivity {
         largestPrimeTW.setText(Long.toString(largestPrime));
         currCountTW.setText(Long.toString(currentCount));
 
-        primeCalc = new PrimeCalc(currentCount);
-        primeCalc.setSleepTime(500);
+        primeCalc = new PrimeCalc(currentCount, largestPrimeTW, currCountTW);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (primeCalc != null)
+            primeCalc.stopLoop();
+
+        initPrimeCalc();
+
+        SeekBar calcFreqSeekBar = findViewById(R.id.calc_freq_setting);
+        calcFreqSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                primeCalc.setSleepTime(i);
+                calcFreqTW.setText(Integer.toString(i));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        primeCalc.setSleepTime(calcFreqSeekBar.getProgress());
+        calcFreqTW.setText(Integer.toString(calcFreqSeekBar.getProgress()));
+
         primeCalc.start();
-        super.onResume();
     }
 
     /**
@@ -58,80 +89,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    /**
-     * Calculates prime numbers in its own thread and updates the TextViews with the new values.
-     */
-    private class PrimeCalc extends Thread {
-        private boolean run = true;
-        private long largestPrime, currNum;
-        private long sleepTime;
 
-        PrimeCalc(long startNum) {
-            currNum = startNum;
-        }
-
-        @Override
-        public void run() {
-            while (run) {
-                if (isPrime(currNum)) {
-                    largestPrime = currNum;
-                    updateText(largestPrimeTW, largestPrime);
-                }
-                updateText(currCountTW, currNum);
-                currNum += 2; // The only even prime number is 2, so we can skip checking all even numbers
-
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        /**
-         * Update textview with a new number
-         */
-        private void updateText(final TextView tw, final long num) {
-            tw.post(new Runnable() {
-                public void run() {
-                    tw.setText(Long.toString(num));
-                }
-            });
-        }
-
-        /**
-         * Checks if a number is prime, assuming it's not even
-         */
-        private boolean isPrime(long candidate) {
-            long sqrt = (long) Math.sqrt(candidate);
-            for (long i = 3; i <= sqrt; i += 2)
-                if (candidate % i == 0) return false;
-            return true;
-        }
-
-        long getLargestPrime() {
-            return largestPrime;
-        }
-
-        long getCurrNum() {
-            return currNum;
-        }
-
-        /**
-         * Throttle this thread
-         * @param time How long the thread should sleep after each iteration in milliseconds
-         */
-        void setSleepTime(long time) {
-            sleepTime = time >= 0? time : 0;
-        }
-
-        /**
-         * lets the run loop terminate on its own, as Thread.stop() is deprecated
-         */
-        void stopLoop() {
-            run = false;
-        }
-    }
 
 
 }
