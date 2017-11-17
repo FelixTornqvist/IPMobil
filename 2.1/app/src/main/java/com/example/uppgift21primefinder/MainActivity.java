@@ -26,13 +26,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         SharedPreferences settings = getPreferences(MODE_PRIVATE);
-        long largestPrime = settings.getLong(LARGEST_PRIME_PREF, 0);
-        long currentCount = settings.getLong(CURR_COUNT_PREF, 0);
+        long largestPrime = settings.getLong(LARGEST_PRIME_PREF, 3);
+        long currentCount = settings.getLong(CURR_COUNT_PREF, 3);
+
+        // In case the currentCount from last time is even (should never happen though -- extra safety)
+        currentCount = (currentCount % 2 == 0)? currentCount + 1 : currentCount;
 
         largestPrimeTW.setText(Long.toString(largestPrime));
         currCountTW.setText(Long.toString(currentCount));
 
         primeCalc = new PrimeCalc(currentCount);
+        primeCalc.setSleepTime(500);
         primeCalc.start();
         super.onResume();
     }
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private class PrimeCalc extends Thread {
         private boolean run = true;
         private long largestPrime, currNum;
+        private long sleepTime;
 
         PrimeCalc(long startNum) {
             currNum = startNum;
@@ -73,7 +78,13 @@ public class MainActivity extends AppCompatActivity {
                     updateText(largestPrimeTW, largestPrime);
                 }
                 updateText(currCountTW, currNum);
-                currNum++;
+                currNum += 2; // The only even prime number is 2, so we can skip checking all even numbers
+
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -89,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         /**
-         * Checks if a number is prime
+         * Checks if a number is prime, assuming it's not even
          */
         private boolean isPrime(long candidate) {
             long sqrt = (long) Math.sqrt(candidate);
@@ -104,6 +115,14 @@ public class MainActivity extends AppCompatActivity {
 
         long getCurrNum() {
             return currNum;
+        }
+
+        /**
+         * Throttle this thread
+         * @param time How long the thread should sleep after each iteration in milliseconds
+         */
+        void setSleepTime(long time) {
+            sleepTime = time >= 0? time : 0;
         }
 
         /**
