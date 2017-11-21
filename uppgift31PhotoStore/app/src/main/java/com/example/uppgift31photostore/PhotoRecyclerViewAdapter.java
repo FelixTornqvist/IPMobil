@@ -1,56 +1,89 @@
 package com.example.uppgift31photostore;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
+
+import java.io.File;
 
 /**
  * Heavily inspired from
  * https://stackoverflow.com/questions/40587168/simple-android-grid-example-using-recyclerview-with-gridlayoutmanager-like-the
  */
 public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecyclerViewAdapter.ViewHolder> {
-
-    private String[] mData = new String[0];
-    private LayoutInflater mInflater;
+    private final int THUMB_SIZE = 128;
+    private File[] photoFiles;
+    private LayoutInflater inflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    PhotoRecyclerViewAdapter(Context context, String[] data) {
-        this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+    PhotoRecyclerViewAdapter(Context context, File[] photoFiles) {
+        this.inflater = LayoutInflater.from(context);
+        this.photoFiles = photoFiles;
     }
 
     // inflates the cell layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.photogrid_item, parent, false);
+        View view = inflater.inflate(R.layout.photogrid_item, parent, false);
         return new ViewHolder(view);
     }
 
     // binds the data to the textview in each cell
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        String animal = mData[position];
-        holder.myTextView.setText(animal);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.photo.setImageResource(R.drawable.ic_loading);
+
+        final File file = photoFiles[position];
+        if (file.isFile()) {
+
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    final Bitmap thumbnail = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(file.getAbsolutePath()),
+                            THUMB_SIZE, THUMB_SIZE);
+
+
+                    holder.photo.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (thumbnail != null)
+                                holder.photo.setImageBitmap(thumbnail);
+                            else
+                                holder.photo.setImageResource(R.drawable.ic_unavailable);
+                        }
+                    });
+                }
+
+            });
+        } else {
+            holder.photo.setImageResource(R.drawable.ic_unavailable);
+        }
+
+
     }
 
     // total number of cells
     @Override
     public int getItemCount() {
-        return mData.length;
+        return photoFiles.length;
     }
 
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView myTextView;
+        ImageView photo;
 
         ViewHolder(View itemView) {
             super(itemView);
-            myTextView = (TextView) itemView.findViewById(R.id.info_text);
+            photo = itemView.findViewById(R.id.photo);
             itemView.setOnClickListener(this);
         }
 
@@ -58,11 +91,6 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
         public void onClick(View view) {
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
-    }
-
-    // convenience method for getting data at click position
-    String getItem(int id) {
-        return mData[id];
     }
 
     // allows clicks events to be caught
