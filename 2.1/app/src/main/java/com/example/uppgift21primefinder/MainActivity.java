@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         long currentCount = settings.getLong(CURR_COUNT_PREF, 3);
 
         // In case the currentCount from last time is even (should never happen though -- extra safety)
-        currentCount = (currentCount % 2 == 0)? currentCount + 1 : currentCount;
+        currentCount = (currentCount % 2 == 0) ? currentCount + 1 : currentCount;
 
         largestPrimeTW.setText(Long.toString(largestPrime));
         currCountTW.setText(Long.toString(currentCount));
@@ -60,10 +60,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         primeCalc.setSleepTime(calcFreqSeekBar.getProgress());
@@ -88,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onStop();
     }
-
-
 
 
 }

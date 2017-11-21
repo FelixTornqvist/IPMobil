@@ -13,9 +13,9 @@ public class PrimeCalc extends Thread {
     private TextView largestPrimeTW, currCountTW;
 
     /**
-     * @param startNum Number to start testing from
+     * @param startNum       Number to start testing from
      * @param largestPrimeTW Updates this TextView with largest found prime number
-     * @param currCountTW Updates this TextView with current count (that's tested if it's prime)
+     * @param currCountTW    Updates this TextView with current count (that's tested if it's prime)
      */
     PrimeCalc(long startNum, TextView largestPrimeTW, TextView currCountTW) {
         currNum = startNum;
@@ -72,10 +72,11 @@ public class PrimeCalc extends Thread {
 
     /**
      * Throttle this thread
+     *
      * @param time How long the thread should sleep after each iteration in milliseconds
      */
     void setSleepTime(long time) {
-        sleepTime = time >= 0? time : 0;
+        sleepTime = time >= 0 ? time : 0;
     }
 
     /**
