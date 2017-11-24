@@ -16,7 +16,7 @@ import android.widget.Toast;
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements PhotoRecyclerViewAdapter.ItemClickListener {
-    public static final String ALBUM_DIR = "PhotosEditor";
+    public static final String ALBUM_DIR = "uppgift31PhotoStore";
     private final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
     File[] photoList;
     RecyclerView photosRecycler;

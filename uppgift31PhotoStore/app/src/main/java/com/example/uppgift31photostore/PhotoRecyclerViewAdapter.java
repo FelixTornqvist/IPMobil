@@ -1,6 +1,6 @@
 package com.example.uppgift31photostore;
 
-import android.content.Context;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
@@ -20,11 +20,13 @@ import java.io.File;
 public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecyclerViewAdapter.ViewHolder> {
     private final int THUMB_SIZE = 128;
     private File[] photoFiles;
+    private Activity parentActivity;
     private LayoutInflater inflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    PhotoRecyclerViewAdapter(Context context, File[] photoFiles) {
+    PhotoRecyclerViewAdapter(Activity context, File[] photoFiles) {
+        this.parentActivity = context;
         this.inflater = LayoutInflater.from(context);
         this.photoFiles = photoFiles;
     }
@@ -47,11 +49,10 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    final Bitmap thumbnail = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(file.getAbsolutePath()),
-                            THUMB_SIZE, THUMB_SIZE);
+                    Bitmap picture = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    final Bitmap thumbnail = ThumbnailUtils.extractThumbnail(picture, THUMB_SIZE, THUMB_SIZE);
 
-
-                    holder.photo.post(new Runnable() {
+                    parentActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             if (thumbnail != null)
