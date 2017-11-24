@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +19,6 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity implements PhotoRecyclerViewAdapter.ItemClickListener {
     public static final String ALBUM_DIR = "uppgift31PhotoStore";
     private final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
-    Toolbar toolbar;
     File[] photoList;
     RecyclerView photosRecycler;
 
@@ -27,13 +27,19 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (!requestPermissionIfNone(Manifest.permission.READ_EXTERNAL_STORAGE, PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)) {
             initPhotosRecycler();
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_toolbar_activity_main, menu);
+        return true;
     }
 
     private void initPhotosRecycler() {
