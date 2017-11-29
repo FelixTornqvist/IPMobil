@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,8 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity implements PhotoRecyclerViewAdapter.ItemClickListener {
     public static final String ALBUM_DIR = "uppgift31PhotoStore";
     private final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    private final int REQUEST_IMAGE_CAPTURE = 2;
+
     File[] photoList;
     RecyclerView photosRecycler;
 
@@ -34,12 +37,6 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
             initPhotosRecycler();
         }
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_toolbar_activity_main, menu);
-        return true;
     }
 
     private void initPhotosRecycler() {
@@ -60,6 +57,23 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_toolbar_activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem mi) {
+        switch (mi.getItemId()) {
+            case R.id.action_camera:
+                Toast.makeText(this, "Pressed camera buttton", Toast.LENGTH_SHORT).show();
+
+                return true;
+        }
+        return false;
+    }
+
+    @Override
     public void onItemClick(View view, int position) {
         Toast.makeText(this, photoList[position].getAbsolutePath(), Toast.LENGTH_SHORT).show();
     }
@@ -75,16 +89,6 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
-    }
-
-    /* Checks if external storage is available to at least read */
-    public boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
             return true;
         }
         return false;
