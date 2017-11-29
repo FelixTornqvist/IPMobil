@@ -20,7 +20,7 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity implements PhotoRecyclerViewAdapter.ItemClickListener {
     public static final String ALBUM_DIR = "uppgift31PhotoStore";
     private final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
-    private final int REQUEST_IMAGE_CAPTURE = 2;
+    private final int PERMISSION_REQUEST_IMAGE_CAPTURE = 2;
 
     File[] photoList;
     RecyclerView photosRecycler;
@@ -66,7 +66,9 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
     public boolean onOptionsItemSelected(MenuItem mi) {
         switch (mi.getItemId()) {
             case R.id.action_camera:
-                Toast.makeText(this, "Pressed camera buttton", Toast.LENGTH_SHORT).show();
+                if (!requestPermissionIfNone(Manifest.permission.CAMERA, PERMISSION_REQUEST_IMAGE_CAPTURE)) {
+                    Toast.makeText(this, "PERMISSION GRANTED BEFORE, YAY!", Toast.LENGTH_SHORT).show();
+                }
 
                 return true;
         }
@@ -124,6 +126,15 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
                 break;
             }
 
+            case PERMISSION_REQUEST_IMAGE_CAPTURE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "PERMISSION GRANTED FOR THE FIRST TIME, YAY!", Toast.LENGTH_LONG).show();
+                    
+                } else {
+                    Toast.makeText(this, "Cant take new photo without permission", Toast.LENGTH_LONG).show();
+                }
+                break;
 
         }
     }
