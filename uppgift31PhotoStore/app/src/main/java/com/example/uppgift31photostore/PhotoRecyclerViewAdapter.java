@@ -78,6 +78,16 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
     }
 
 
+    /**
+     * Sets the array of files and notifies that the dataset have changed.
+     * @param photoList new listing of all files.
+     */
+    public void setPhotoList(File[] photoList) {
+        this.photoFiles = photoList;
+        notifyDataSetChanged();
+    }
+
+
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView photo;
