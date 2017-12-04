@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -14,10 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
@@ -26,16 +23,23 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Starting activity for task 3.1
+ */
 public class MainActivity extends AppCompatActivity implements PhotoRecyclerViewAdapter.ItemClickListener {
-    public static final String ALBUM_DIR = "uppgift31PhotoStore";
     private static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private static final int PERMISSION_REQUEST_CAMERA = 2;
     private static final int REQUEST_IMAGE_CAPTURE = 200;
+
+    private static final int GRID_COLUMNS = 3;
 
     File[] photoList;
     RecyclerView photosRecycler;
     PhotoRecyclerViewAdapter photosGridAdapter;
 
+    /**
+     * Initiates the app's toolbar and runs initPhotosRecycler() if permission for reading storage is permitted already.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
 
     }
 
+    /**
+     * Initiates photo recycler and its adapter with File references to the photos.
+     */
     private void initPhotosRecycler() {
         if (isExternalStorageWritable()) {
             photoList = getAlbumStorageDir().listFiles();
@@ -58,8 +65,7 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
             photosGridAdapter.setClickListener(this);
 
             photosRecycler = findViewById(R.id.photos_grid);
-            int numberOfColumns = 2;
-            photosRecycler.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
+            photosRecycler.setLayoutManager(new GridLayoutManager(this, GRID_COLUMNS));
             photosRecycler.setAdapter(photosGridAdapter);
 
         } else {
@@ -67,12 +73,20 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
         }
     }
 
+    /**
+     * Inflates the options menu.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_activity_main, menu);
         return true;
     }
 
+    /**
+     * Activated when a menu item have been selected, only used for the camera button.
+     *
+     * @param mi selected item
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
         switch (mi.getItemId()) {
@@ -86,6 +100,10 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
         return false;
     }
 
+
+    /**
+     * Starts built in camera-activity that then saves the image to a file specified by createImageFile().
+     */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -108,6 +126,12 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
         }
     }
 
+    /**
+     * Creates a File where the image will be saved.
+     *
+     * @return File pointing at the created file.
+     * @throws IOException if a file could not be created
+     */
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -122,8 +146,13 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
         return image;
     }
 
+    /**
+     * Activated when a photo have been clicked on
+     *
+     * @param position index of the clicked image-file
+     */
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClick(int position) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
 
@@ -134,11 +163,20 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
         startActivity(intent);
     }
 
+    /**
+     * Used to get the storage-location of the photos.
+     *
+     * @return directory of the photos
+     */
     public File getAlbumStorageDir() {
         return getExternalFilesDir(Environment.DIRECTORY_PICTURES);
     }
 
-    /* Checks if external storage is available for read and write */
+    /**
+     * Checks if external storage is available for read and write
+     *
+     * @return true if storage is available, readable and writable.
+     */
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -148,9 +186,11 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
     }
 
     /**
-     * @param permission  permission to check if permission request is needed to (and) grant.
-     * @param requestCode this code is received in onRequestPermissionsResult()
-     * @return true if the permission is requested, false if permission already granted.
+     * Makes sure that a permission is granted by the user.
+     *
+     * @param permission  permission to grant.
+     * @param requestCode this int code is received in onRequestPermissionsResult() if the permission had to be requested.
+     * @return true if the permission have been requested, false if permission already granted.
      */
     private boolean requestPermissionIfNone(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(this, permission)
@@ -161,6 +201,9 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
         return false;
     }
 
+    /**
+     * Deals with what should happen after the user have answered the permission question.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -189,6 +232,9 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
         }
     }
 
+    /**
+     * Makes sure that the photos grid is updated after a picture have been taken in the camera-activity.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -196,6 +242,10 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
         }
     }
 
+    /**
+     * Updates the photoList with the newest listing of files in the album directory and
+     * makes sure that the adapter have the same list.
+     */
     private void updatePhotoList() {
         photoList = getAlbumStorageDir().listFiles();
         photosGridAdapter.setPhotoList(photoList);

@@ -14,8 +14,7 @@ import android.widget.ImageView;
 import java.io.File;
 
 /**
- * Heavily inspired from
- * https://stackoverflow.com/questions/40587168/simple-android-grid-example-using-recyclerview-with-gridlayoutmanager-like-the
+ * Adapter for the RecyclerView containing all photos.
  */
 public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecyclerViewAdapter.ViewHolder> {
     private final int THUMB_SIZE = 128;
@@ -24,21 +23,28 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
     private LayoutInflater inflater;
     private ItemClickListener mClickListener;
 
-    // data is passed into the constructor
+    /**
+     * @param context    Used to enable setting the photos inside the UI thread.
+     * @param photoFiles Photo files to show in the RecyclerView.
+     */
     PhotoRecyclerViewAdapter(Activity context, File[] photoFiles) {
         this.parentActivity = context;
         this.inflater = LayoutInflater.from(context);
         this.photoFiles = photoFiles;
     }
 
-    // inflates the cell layout from xml when needed
+    /**
+     * Inflates the cell layout from xml when needed.
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.photogrid_item, parent, false);
         return new ViewHolder(view);
     }
 
-    // binds the data to the textview in each cell
+    /**
+     * Binds photos to each ImageView in the RecyclerView.
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.photo.setImageResource(R.drawable.ic_loading);
@@ -71,7 +77,9 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
 
     }
 
-    // total number of cells
+    /**
+     * @return Total number of items (photos) to show.
+     */
     @Override
     public int getItemCount() {
         return photoFiles.length;
@@ -79,7 +87,8 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
 
 
     /**
-     * Sets the array of files and notifies that the dataset have changed.
+     * Sets the array of files and notifies that the dataset have changed. Useful when images have been added.
+     *
      * @param photoList new listing of all files.
      */
     public void setPhotoList(File[] photoList) {
@@ -88,7 +97,9 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
     }
 
 
-    // stores and recycles views as they are scrolled off screen
+    /**
+     * Stores and recycles views as they are scrolled off screen.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView photo;
 
@@ -100,17 +111,21 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null) mClickListener.onItemClick(getAdapterPosition());
         }
     }
 
-    // allows clicks events to be caught
+    /**
+     * Allows clicks events to be caught.
+     */
     void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 
-    // parent activity will implement this method to respond to click events
+    /**
+     * Parent activity will implement this method to respond to click events.
+     */
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(int position);
     }
 }
