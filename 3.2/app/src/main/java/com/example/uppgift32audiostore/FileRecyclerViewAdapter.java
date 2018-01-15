@@ -48,10 +48,11 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
         String fileName = file.getName();
 
         if (file.isFile() && fileName.endsWith(".3gp")) {
-            holder.image.setImageResource(R.drawable.ic_microphone);
+            holder.image.setImageResource(R.drawable.ic_play);
             holder.text.setText(fileName);
         } else {
             holder.image.setImageResource(R.drawable.ic_unavailable);
+            holder.text.setText(fileName);
         }
     }
 

@@ -122,16 +122,10 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
      */
     private File createAudioFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = "REC_" + timeStamp + "_";
+        String fileName = timeStamp;
         File storageDir = getAudioStorageDir();
 
-        File file = File.createTempFile(
-                fileName,
-                ".3gp",
-                storageDir
-        );
-
-        return file;
+        return new File(storageDir, fileName + ".3gp");
     }
 
     /**

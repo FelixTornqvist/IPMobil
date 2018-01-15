@@ -16,6 +16,7 @@ public class RecordActivity extends AppCompatActivity {
     public static final String EXTRA_SOUND_FILE = "rec_file";
     private File outputFile;
     MediaRecorder myAudioRecorder;
+    boolean recording = false;
 
     private Button recordB, stopB;
     private TextView filenameTxt, title;
@@ -52,6 +53,7 @@ public class RecordActivity extends AppCompatActivity {
         try {
             myAudioRecorder.prepare();
             myAudioRecorder.start();
+            recording = true;
         } catch (IllegalStateException ise) {
             Toast.makeText(this, "failed to record", Toast.LENGTH_LONG).show();
         } catch (IOException ioe) {
@@ -73,6 +75,7 @@ public class RecordActivity extends AppCompatActivity {
     private void stopRecording() {
         myAudioRecorder.stop();
         myAudioRecorder.release();
+        recording = false;
         myAudioRecorder = null;
 
         stopB.setEnabled(false);
@@ -84,8 +87,8 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        if (myAudioRecorder != null) {
-            stopRecording();
+        if (myAudioRecorder != null && recording) {
+            stopRecordingListener(null);
         }
     }
 }
