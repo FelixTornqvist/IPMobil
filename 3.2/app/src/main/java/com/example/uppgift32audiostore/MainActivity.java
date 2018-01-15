@@ -106,24 +106,26 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
      * Starts built in audio recording activity that then saves the recording to a file specified by createAudioFile().
      */
     private void dispatchRecordAudioIntent() { //TODO: actually start an audio-recording activity-------------------------------------
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        Intent recordIntent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+        if (recordIntent.resolveActivity(getPackageManager()) != null) {
 
-            File photoFile = null;
+            File audioFile = null;
             try {
-                photoFile = createAudioFile();
+                audioFile = createAudioFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this, FILE_PROVIDER, photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            if (audioFile != null) {
+                Uri audioURI = FileProvider.getUriForFile(this, FILE_PROVIDER, audioFile);
+                recordIntent.putExtra(MediaStore.EXTRA_OUTPUT, audioURI);
 
-                startActivityForResult(takePictureIntent, REQUEST_AUDIO_CAPTURE);
+                startActivityForResult(recordIntent, REQUEST_AUDIO_CAPTURE);
             } else {
-                Toast.makeText(this, "Error: Could not create image file", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Error: Could not create audio file", Toast.LENGTH_LONG).show();
             }
+        } else {
+            Toast.makeText(this, "Error: no sound recording installed", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -135,12 +137,12 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
      */
     private File createAudioFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = "JPEG_" + timeStamp + "_";
+        String fileName = "REC_" + timeStamp + "_";
         File storageDir = getAudioStorageDir();
 
         File file = File.createTempFile(
                 fileName,
-                ".jpg",
+                ".mp3",
                 storageDir
         );
 
