@@ -5,13 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -32,8 +31,6 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
     private static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private static final int PERMISSION_REQUEST_MICROPHONE = 2;
     private static final int REQUEST_AUDIO_CAPTURE = 200;
-
-    private static final int GRID_COLUMNS = 3;
 
     File[] audioList;
     RecyclerView filesRecycler;
@@ -67,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
             filesGridAdapter.setClickListener(this);
 
             filesRecycler = findViewById(R.id.files_grid);
-            filesRecycler.setLayoutManager(new GridLayoutManager(this, GRID_COLUMNS));
+            filesRecycler.setLayoutManager(new LinearLayoutManager(this));
             filesRecycler.setAdapter(filesGridAdapter);
 
         } else {

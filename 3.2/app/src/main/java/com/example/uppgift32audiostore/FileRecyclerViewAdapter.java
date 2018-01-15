@@ -1,36 +1,33 @@
 package com.example.uppgift32audiostore;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.File;
 
 /**
- * Adapter for the RecyclerView containing all photos.
+ * Adapter for the RecyclerView containing all recordings.
  */
 public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerViewAdapter.ViewHolder> {
     private final int THUMB_SIZE = 128;
-    private File[] photoFiles;
+    private File[] files;
     private Activity parentActivity;
     private LayoutInflater inflater;
     private ItemClickListener mClickListener;
 
     /**
-     * @param context    Used to enable setting the photos inside the UI thread.
-     * @param photoFiles Photo files to show in the RecyclerView.
+     * @param context    Used to enable setting the previews inside the UI thread.
+     * @param files sound files to show in the RecyclerView.
      */
-    FileRecyclerViewAdapter(Activity context, File[] photoFiles) {
+    FileRecyclerViewAdapter(Activity context, File[] files) {
         this.parentActivity = context;
         this.inflater = LayoutInflater.from(context);
-        this.photoFiles = photoFiles;
+        this.files = files;
     }
 
     /**
@@ -47,34 +44,15 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
      */
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.photo.setImageResource(R.drawable.ic_loading);
+        final File file = files[position];
+        String fileName = file.getName();
 
-        final File file = photoFiles[position];
-        if (file.isFile()) {
-
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    Bitmap picture = BitmapFactory.decodeFile(file.getAbsolutePath());
-                    final Bitmap thumbnail = ThumbnailUtils.extractThumbnail(picture, THUMB_SIZE, THUMB_SIZE);
-
-                    parentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (thumbnail != null)
-                                holder.photo.setImageBitmap(thumbnail);
-                            else
-                                holder.photo.setImageResource(R.drawable.ic_unavailable);
-                        }
-                    });
-                }
-
-            });
+        if (file.isFile() && fileName.endsWith(".3gp")) {
+            holder.image.setImageResource(R.drawable.ic_microphone);
+            holder.text.setText(fileName);
         } else {
-            holder.photo.setImageResource(R.drawable.ic_unavailable);
+            holder.image.setImageResource(R.drawable.ic_unavailable);
         }
-
-
     }
 
     /**
@@ -82,17 +60,17 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
      */
     @Override
     public int getItemCount() {
-        return photoFiles.length;
+        return files.length;
     }
 
 
     /**
      * Sets the array of files and notifies that the dataset have changed. Useful when images have been added.
      *
-     * @param photoList new listing of all files.
+     * @param filesList new listing of all files.
      */
-    public void setFilesList(File[] photoList) {
-        this.photoFiles = photoList;
+    public void setFilesList(File[] filesList) {
+        this.files = filesList;
         notifyDataSetChanged();
     }
 
@@ -101,11 +79,13 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
      * Stores and recycles views as they are scrolled off screen.
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView photo;
+        ImageView image;
+        TextView text;
 
         ViewHolder(View itemView) {
             super(itemView);
-            photo = itemView.findViewById(R.id.photo);
+            image = itemView.findViewById(R.id.image_filegrid_item);
+            text = itemView.findViewById(R.id.text_filegrid_item_filename);
             itemView.setOnClickListener(this);
         }
 
