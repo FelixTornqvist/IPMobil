@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">uppgift 3.1 PhotoStore</string>
-    <string name="photogrid_item_description">photo item</string>
-    <string name="action_take_picture">Take picture</string>
+    <string name="app_name">uppgift 3.2 AudioStore</string>
+    <string name="filegrid_item_description">audio item</string>
+    <string name="action_record_audio">Record audio</string>
 </resources>

@@ -7,7 +7,7 @@
     tools:context="com.example.uppgift32audiostore.MainActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/photos_grid"
+        android:id="@+id/files_grid"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

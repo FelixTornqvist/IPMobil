@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 /**
- * This custom layout keeps the photogrid_item:s square.
+ * This custom layout keeps the filegrid_item:s square.
  */
 
 public class SquareLinearLayout extends LinearLayout {
@@ -23,7 +23,7 @@ public class SquareLinearLayout extends LinearLayout {
     }
 
     /**
-     * Keeps the photogrid_item:s square by setting the height of itself to its own width.
+     * Keeps the filegrid_item:s square by setting the height of itself to its own width.
      */
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

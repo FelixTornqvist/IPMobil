@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
             photosGridAdapter = new PhotoRecyclerViewAdapter(this, photoList);
             photosGridAdapter.setClickListener(this);
 
-            photosRecycler = findViewById(R.id.photos_grid);
+            photosRecycler = findViewById(R.id.files_grid);
             photosRecycler.setLayoutManager(new GridLayoutManager(this, GRID_COLUMNS));
             photosRecycler.setAdapter(photosGridAdapter);
 
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
         switch (mi.getItemId()) {
-            case R.id.action_camera:
+            case R.id.action_record:
                 if (!requestPermissionIfNone(Manifest.permission.CAMERA, PERMISSION_REQUEST_CAMERA)) {
                     dispatchTakePictureIntent();
                 }
