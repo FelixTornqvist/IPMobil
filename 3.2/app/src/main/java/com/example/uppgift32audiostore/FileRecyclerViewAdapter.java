@@ -16,7 +16,7 @@ import java.io.File;
 /**
  * Adapter for the RecyclerView containing all photos.
  */
-public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecyclerViewAdapter.ViewHolder> {
+public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerViewAdapter.ViewHolder> {
     private final int THUMB_SIZE = 128;
     private File[] photoFiles;
     private Activity parentActivity;
@@ -27,7 +27,7 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
      * @param context    Used to enable setting the photos inside the UI thread.
      * @param photoFiles Photo files to show in the RecyclerView.
      */
-    PhotoRecyclerViewAdapter(Activity context, File[] photoFiles) {
+    FileRecyclerViewAdapter(Activity context, File[] photoFiles) {
         this.parentActivity = context;
         this.inflater = LayoutInflater.from(context);
         this.photoFiles = photoFiles;
@@ -91,7 +91,7 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
      *
      * @param photoList new listing of all files.
      */
-    public void setPhotoList(File[] photoList) {
+    public void setFilesList(File[] photoList) {
         this.photoFiles = photoList;
         notifyDataSetChanged();
     }

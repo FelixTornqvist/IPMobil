@@ -26,19 +26,20 @@ import java.util.Date;
 /**
  * Starting activity for task 3.2
  */
-public class MainActivity extends AppCompatActivity implements PhotoRecyclerViewAdapter.ItemClickListener {
+public class MainActivity extends AppCompatActivity implements FileRecyclerViewAdapter.ItemClickListener {
+    private static final String FILE_PROVIDER = "com.example.uppgift32audiostore.fileprovider";
     private static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
-    private static final int PERMISSION_REQUEST_CAMERA = 2;
-    private static final int REQUEST_IMAGE_CAPTURE = 200;
+    private static final int PERMISSION_REQUEST_MICROPHONE = 2;
+    private static final int REQUEST_AUDIO_CAPTURE = 200;
 
     private static final int GRID_COLUMNS = 3;
 
-    File[] photoList;
-    RecyclerView photosRecycler;
-    PhotoRecyclerViewAdapter photosGridAdapter;
+    File[] audioList;
+    RecyclerView filesRecycler;
+    FileRecyclerViewAdapter filesGridAdapter;
 
     /**
-     * Initiates the app's toolbar and runs initPhotosRecycler() if permission for reading storage is permitted already.
+     * Initiates the app's toolbar and runs initFilesRecycler() if permission for reading storage is permitted already.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,24 +50,24 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
         setSupportActionBar(toolbar);
 
         if (!requestPermissionIfNone(Manifest.permission.READ_EXTERNAL_STORAGE, PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)) {
-            initPhotosRecycler();
+            initFilesRecycler();
         }
 
     }
 
     /**
-     * Initiates photo recycler and its adapter with File references to the photos.
+     * Initiates files recycler and its adapter with File references to the audio files.
      */
-    private void initPhotosRecycler() {
+    private void initFilesRecycler() {
         if (isExternalStorageWritable()) {
-            photoList = getAlbumStorageDir().listFiles();
+            audioList = getAudioStorageDir().listFiles();
 
-            photosGridAdapter = new PhotoRecyclerViewAdapter(this, photoList);
-            photosGridAdapter.setClickListener(this);
+            filesGridAdapter = new FileRecyclerViewAdapter(this, audioList);
+            filesGridAdapter.setClickListener(this);
 
-            photosRecycler = findViewById(R.id.files_grid);
-            photosRecycler.setLayoutManager(new GridLayoutManager(this, GRID_COLUMNS));
-            photosRecycler.setAdapter(photosGridAdapter);
+            filesRecycler = findViewById(R.id.files_grid);
+            filesRecycler.setLayoutManager(new GridLayoutManager(this, GRID_COLUMNS));
+            filesRecycler.setAdapter(filesGridAdapter);
 
         } else {
             Toast.makeText(this, "Unable to read from external storage", Toast.LENGTH_LONG).show();
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
     }
 
     /**
-     * Activated when a menu item have been selected, only used for the camera button.
+     * Activated when a menu item have been selected, only used for the record button.
      *
      * @param mi selected item
      */
@@ -91,8 +92,8 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
     public boolean onOptionsItemSelected(MenuItem mi) {
         switch (mi.getItemId()) {
             case R.id.action_record:
-                if (!requestPermissionIfNone(Manifest.permission.CAMERA, PERMISSION_REQUEST_CAMERA)) {
-                    dispatchTakePictureIntent();
+                if (!requestPermissionIfNone(Manifest.permission.RECORD_AUDIO, PERMISSION_REQUEST_MICROPHONE)) {
+                    dispatchRecordAudioIntent();
                 }
 
                 return true;
@@ -102,24 +103,24 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
 
 
     /**
-     * Starts built in camera-activity that then saves the image to a file specified by createImageFile().
+     * Starts built in audio recording activity that then saves the recording to a file specified by createAudioFile().
      */
-    private void dispatchTakePictureIntent() {
+    private void dispatchRecordAudioIntent() { //TODO: actually start an audio-recording activity-------------------------------------
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 
             File photoFile = null;
             try {
-                photoFile = createImageFile();
+                photoFile = createAudioFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this, "com.example.uppgift31photostore.fileprovider", photoFile);
+                Uri photoURI = FileProvider.getUriForFile(this, FILE_PROVIDER, photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                startActivityForResult(takePictureIntent, REQUEST_AUDIO_CAPTURE);
             } else {
                 Toast.makeText(this, "Error: Could not create image file", Toast.LENGTH_LONG).show();
             }
@@ -127,49 +128,49 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
     }
 
     /**
-     * Creates a File where the image will be saved.
+     * Creates a File where the audio will be saved.
      *
      * @return File pointing at the created file.
      * @throws IOException if a file could not be created
      */
-    private File createImageFile() throws IOException {
+    private File createAudioFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getAlbumStorageDir();
+        String fileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getAudioStorageDir();
 
-        File image = File.createTempFile(
-                imageFileName,
+        File file = File.createTempFile(
+                fileName,
                 ".jpg",
                 storageDir
         );
 
-        return image;
+        return file;
     }
 
     /**
-     * Activated when a photo have been clicked on
+     * Activated when a file have been clicked on
      *
-     * @param position index of the clicked image-file
+     * @param position index of the clicked file
      */
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
 
-        Uri imageFile = FileProvider.getUriForFile(this, "com.example.uppgift31photostore.fileprovider", photoList[position]);
-        intent.setDataAndType(imageFile, "image/*")
+        Uri file = FileProvider.getUriForFile(this, FILE_PROVIDER, audioList[position]);
+        intent.setDataAndType(file, "image/*")                  // TODO: find out how to do this ----------------------------------
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         startActivity(intent);
     }
 
     /**
-     * Used to get the storage-location of the photos.
+     * Used to get the storage-location of the audio files.
      *
-     * @return directory of the photos
+     * @return directory of the audio files
      */
-    public File getAlbumStorageDir() {
-        return getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    public File getAudioStorageDir() {
+        return getExternalFilesDir(Environment.DIRECTORY_MUSIC);
     }
 
     /**
@@ -212,20 +213,20 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    initPhotosRecycler();
+                    initFilesRecycler();
                 } else {
                     Toast.makeText(this, "Storage required for this app to work", Toast.LENGTH_LONG).show();
                 }
                 break;
             }
 
-            case PERMISSION_REQUEST_CAMERA:
+            case PERMISSION_REQUEST_MICROPHONE:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    dispatchTakePictureIntent();
+                    dispatchRecordAudioIntent();
                 } else {
-                    Toast.makeText(this, "Cant take new photo without permission", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Can't record audio without permission", Toast.LENGTH_LONG).show();
                 }
                 break;
 
@@ -233,22 +234,22 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
     }
 
     /**
-     * Makes sure that the photos grid is updated after a picture have been taken in the camera-activity.
+     * Makes sure that the files grid is updated after a recording have been made after the recording-activity.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            updatePhotoList();
+        if (requestCode == REQUEST_AUDIO_CAPTURE && resultCode == RESULT_OK) {
+            updateFilesList();
         }
     }
 
     /**
-     * Updates the photoList with the newest listing of files in the album directory and
+     * Updates the audioList with the newest listing of files in the directory and
      * makes sure that the adapter have the same list.
      */
-    private void updatePhotoList() {
-        photoList = getAlbumStorageDir().listFiles();
-        photosGridAdapter.setPhotoList(photoList);
+    private void updateFilesList() {
+        audioList = getAudioStorageDir().listFiles();
+        filesGridAdapter.setFilesList(audioList);
     }
 
 }
