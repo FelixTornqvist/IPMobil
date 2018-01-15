@@ -7,7 +7,7 @@
     android:background="@color/colorPrimary"
     tools:context="com.example.uppgift32audiostore.RecordActivity">
 
-    <ImageButton
+    <Button
         android:id="@+id/button_recordAct_record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,44 +15,52 @@
         android:layout_marginEnd="32dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/recording_start"
+        android:onClick="startRecordingListener"
+        android:text="@string/recording_start"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_recordAct_stop"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_record" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
+    <Button
         android:id="@+id/button_recordAct_stop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:contentDescription="@string/recording_stop"
+        android:onClick="stopRecordingListener"
+        android:text="@string/recording_stop"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         app:layout_constraintBottom_toBottomOf="@+id/button_recordAct_record"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button_recordAct_record"
-        app:layout_constraintTop_toTopOf="@+id/button_recordAct_record"
-        app:srcCompat="@drawable/ic_stop" />
+        app:layout_constraintTop_toTopOf="@+id/button_recordAct_record" />
 
     <TextView
         android:id="@+id/text_title_recording"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:text="@string/record_title"
+        android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/record_title" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/text_filename"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_title_recording" />

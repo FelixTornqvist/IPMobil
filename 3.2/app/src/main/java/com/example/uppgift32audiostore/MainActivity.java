@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -105,27 +106,14 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
     /**
      * Starts built in audio recording activity that then saves the recording to a file specified by createAudioFile().
      */
-    private void dispatchRecordAudioIntent() { //TODO: actually start an audio-recording activity-------------------------------------
-        Intent recordIntent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-        if (recordIntent.resolveActivity(getPackageManager()) != null) {
-
-            File audioFile = null;
-            try {
-                audioFile = createAudioFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            if (audioFile != null) {
-                Uri audioURI = FileProvider.getUriForFile(this, FILE_PROVIDER, audioFile);
-                recordIntent.putExtra(MediaStore.EXTRA_OUTPUT, audioURI);
-
-                startActivityForResult(recordIntent, REQUEST_AUDIO_CAPTURE);
-            } else {
-                Toast.makeText(this, "Error: Could not create audio file", Toast.LENGTH_LONG).show();
-            }
-        } else {
-            Toast.makeText(this, "Error: no sound recording installed", Toast.LENGTH_LONG).show();
+    private void dispatchRecordAudioIntent() {
+        Intent intent = new Intent(this, RecordActivity.class);
+        try {
+            File file = createAudioFile();
+            intent.putExtra(RecordActivity.EXTRA_SOUND_FILE, file);
+            startActivityForResult(intent, REQUEST_AUDIO_CAPTURE);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -142,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
 
         File file = File.createTempFile(
                 fileName,
-                ".mp3",
+                ".3gp",
                 storageDir
         );
 
@@ -160,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
         intent.setAction(Intent.ACTION_VIEW);
 
         Uri file = FileProvider.getUriForFile(this, FILE_PROVIDER, audioList[position]);
-        intent.setDataAndType(file, "image/*")                  // TODO: find out how to do this ----------------------------------
+        intent.setDataAndType(file, "audio/*")
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         startActivity(intent);
@@ -243,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
         if (requestCode == REQUEST_AUDIO_CAPTURE && resultCode == RESULT_OK) {
             updateFilesList();
         }
+        Log.v("Main", "actRes: "+requestCode+" , "+resultCode+", intent: "+data);
     }
 
     /**

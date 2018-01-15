@@ -3,13 +3,8 @@
 
     <item
         android:id="@+id/action_record"
-        android:icon="@drawable/ic_record"
+        android:icon="@drawable/ic_microphone"
         android:title="@string/action_record_audio"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_stop"
-        android:icon="@drawable/ic_stop"
-        android:title="@string/action_stop_recording"
         app:showAsAction="ifRoom" />
 
 </menu>
