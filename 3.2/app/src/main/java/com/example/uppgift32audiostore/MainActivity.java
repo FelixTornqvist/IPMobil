@@ -1,4 +1,4 @@
-package com.example.uppgift31photostore;
+package com.example.uppgift32audiostore;
 
 import android.Manifest;
 import android.content.Intent;
@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Starting activity for task 3.1
+ * Starting activity for task 3.2
  */
 public class MainActivity extends AppCompatActivity implements PhotoRecyclerViewAdapter.ItemClickListener {
     private static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;

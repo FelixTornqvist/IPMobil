@@ -1,4 +1,4 @@
-package com.example.uppgift31photostore;
+package com.example.uppgift32audiostore;
 
 import org.junit.Test;
 
