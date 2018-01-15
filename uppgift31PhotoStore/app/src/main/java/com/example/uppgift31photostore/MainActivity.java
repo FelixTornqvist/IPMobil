@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
 
-        Uri imageFile = Uri.fromFile(photoList[position]);
+        Uri imageFile = FileProvider.getUriForFile(this, "com.example.uppgift31photostore.fileprovider", photoList[position]);
         intent.setDataAndType(imageFile, "image/*")
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
