@@ -35,7 +35,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
      */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.filegrid_item, parent, false);
+        View view = inflater.inflate(R.layout.filelist_item, parent, false);
         return new ViewHolder(view);
     }
 
