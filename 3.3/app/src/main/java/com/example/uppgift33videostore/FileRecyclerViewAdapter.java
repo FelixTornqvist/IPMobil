@@ -44,7 +44,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
         final File file = files[position];
         String fileName = file.getName();
 
-        if (file.isFile() && fileName.endsWith(".3gp")) { // TODO: change file extension-------------------------------------------
+        if (file.isFile() && fileName.endsWith(".mp4")) {
             holder.image.setImageResource(R.drawable.ic_play);
             holder.text.setText(fileName);
         } else {
