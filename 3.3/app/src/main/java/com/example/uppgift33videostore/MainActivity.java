@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,11 +20,12 @@ import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Starting activity for task 3.2
+ * Starting activity for task 3.3
  */
 public class MainActivity extends AppCompatActivity implements FileRecyclerViewAdapter.ItemClickListener {
     private static final String FILE_PROVIDER = "com.example.uppgift33videostore.fileprovider";
@@ -102,11 +104,16 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
     /**
      * Starts the built in video recording activity that then saves the recording to a file specified by createVideoFile().
      */
-    private void dispatchRecordVideoIntent() { // TODO: start video recording act -------------------------------------------------
-//        Intent intent = new Intent(this, RecordActivity.class);
-//        File file = createVideoFile();
-//        intent.putExtra(RecordActivity.EXTRA_SOUND_FILE, file);
-//        startActivityForResult(intent, REQUEST_VIDEO_CAPTURE);
+    private void dispatchRecordVideoIntent() {
+        Intent recordIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (recordIntent.resolveActivity(getPackageManager()) != null) {
+
+            File photoFile = createVideoFile();
+            Uri photoURI = FileProvider.getUriForFile(this, FILE_PROVIDER, photoFile);
+            recordIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
+            startActivityForResult(recordIntent, REQUEST_VIDEO_CAPTURE);
+        }
     }
 
     /**
@@ -114,15 +121,15 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
      *
      * @return File pointing at the new file location.
      */
-    private File createVideoFile() { // TODO: --------------------------------------------------------------------------------------
+    private File createVideoFile() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File storageDir = getVideoStorageDir();
 
-        return new File(storageDir, timeStamp + ".3gp");
+        return new File(storageDir, timeStamp + ".mp4");
     }
 
     /**
-     * Activated when a file have been clicked on
+     * Activated when a file have been clicked on, opens built in activity for viewing video.
      *
      * @param position index of the clicked file
      */
@@ -132,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
         intent.setAction(Intent.ACTION_VIEW);
 
         Uri file = FileProvider.getUriForFile(this, FILE_PROVIDER, videoList[position]);
-        intent.setDataAndType(file, "audio/*") // TODO: "video/*" ------------------------------------------------------------------
+        intent.setDataAndType(file, "video/*")
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         startActivity(intent);
