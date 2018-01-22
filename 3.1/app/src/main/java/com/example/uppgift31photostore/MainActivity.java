@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements PhotoRecyclerView
     }
 
     /**
-     * Activated when a photo have been clicked on
+     * Activated when a photo have been clicked on, opens built in activity for viewing images.
      *
      * @param position index of the clicked image-file
      */
