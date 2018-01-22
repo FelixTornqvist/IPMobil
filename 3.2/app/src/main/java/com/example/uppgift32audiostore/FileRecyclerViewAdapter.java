@@ -14,18 +14,15 @@ import java.io.File;
  * Adapter for the RecyclerView containing all recordings.
  */
 public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerViewAdapter.ViewHolder> {
-    private final int THUMB_SIZE = 128;
     private File[] files;
-    private Activity parentActivity;
     private LayoutInflater inflater;
     private ItemClickListener mClickListener;
 
     /**
-     * @param context    Used to enable setting the previews inside the UI thread.
-     * @param files sound files to show in the RecyclerView.
+     * @param context Used to enable setting the previews inside the UI thread.
+     * @param files   sound files to show in the RecyclerView.
      */
     FileRecyclerViewAdapter(Activity context, File[] files) {
-        this.parentActivity = context;
         this.inflater = LayoutInflater.from(context);
         this.files = files;
     }
@@ -40,7 +37,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
     }
 
     /**
-     * Binds photos to each ImageView in the RecyclerView.
+     * Binds photos and text description to each item in the RecyclerView.
      */
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
@@ -57,7 +54,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
     }
 
     /**
-     * @return Total number of items (photos) to show.
+     * @return Total number of items (audiofiles) to show.
      */
     @Override
     public int getItemCount() {
@@ -66,7 +63,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
 
 
     /**
-     * Sets the array of files and notifies that the dataset have changed. Useful when images have been added.
+     * Sets the array of files and notifies that the dataset have changed. Useful when audio files have been added.
      *
      * @param filesList new listing of all files.
      */

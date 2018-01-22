@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -12,14 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -101,31 +100,25 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
 
 
     /**
-     * Starts built in audio recording activity that then saves the recording to a file specified by createAudioFile().
+     * Starts the audio recording activity that then saves the recording to a file specified by createAudioFile().
      */
     private void dispatchRecordAudioIntent() {
         Intent intent = new Intent(this, RecordActivity.class);
-        try {
-            File file = createAudioFile();
-            intent.putExtra(RecordActivity.EXTRA_SOUND_FILE, file);
-            startActivityForResult(intent, REQUEST_AUDIO_CAPTURE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        File file = createAudioFile();
+        intent.putExtra(RecordActivity.EXTRA_SOUND_FILE, file);
+        startActivityForResult(intent, REQUEST_AUDIO_CAPTURE);
     }
 
     /**
-     * Creates a File where the audio will be saved.
+     * Creates a File, location of where the audio file will be saved.
      *
-     * @return File pointing at the created file.
-     * @throws IOException if a file could not be created
+     * @return File pointing at the new file location.
      */
-    private File createAudioFile() throws IOException {
+    private File createAudioFile() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = timeStamp;
         File storageDir = getAudioStorageDir();
 
-        return new File(storageDir, fileName + ".3gp");
+        return new File(storageDir, timeStamp + ".3gp");
     }
 
     /**
@@ -161,10 +154,7 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
      */
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     /**
@@ -187,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
      * Deals with what should happen after the user have answered the permission question.
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_READ_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
@@ -215,14 +205,13 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
     }
 
     /**
-     * Makes sure that the files grid is updated after a recording have been made after the recording-activity.
+     * Makes sure that the files list is updated after a recording have been made (after the recording-activity finishes)
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_AUDIO_CAPTURE && resultCode == RESULT_OK) {
             updateFilesList();
         }
-        Log.v("Main", "actRes: "+requestCode+" , "+resultCode+", intent: "+data);
     }
 
     /**

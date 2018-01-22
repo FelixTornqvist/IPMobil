@@ -12,6 +12,10 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Activity for recording audio, make sure to specify the output {@link java.io.File} with the tag
+ * {@link #EXTRA_SOUND_FILE} in the Intent for starting this activity.
+ */
 public class RecordActivity extends AppCompatActivity {
     public static final String EXTRA_SOUND_FILE = "rec_file";
     private File outputFile;
@@ -21,6 +25,9 @@ public class RecordActivity extends AppCompatActivity {
     private Button recordB, stopB;
     private TextView filenameTxt, title;
 
+    /**
+     * Retrieve output file from Intent and prepares MediaRecorder that records audio from microphone.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +56,10 @@ public class RecordActivity extends AppCompatActivity {
         myAudioRecorder.setOutputFile(outputFile.getPath());
     }
 
+    /**
+     * This method is activated when the "start recording" button is pressed. Starts recording of audio.
+     * @param v Not used, required to bind function via the layout file.
+     */
     public void startRecordingListener(View v) {
         try {
             myAudioRecorder.prepare();
@@ -65,14 +76,12 @@ public class RecordActivity extends AppCompatActivity {
         title.setText(R.string.recording_title);
     }
 
+    /**
+     * This method is activated when the "stop recording" button is pressed.
+     * Stops the recording of audio and finishes the activity.
+     * @param v Not used, required to bind function via the layout file.
+     */
     public void stopRecordingListener(View v) {
-        stopRecording();
-        Toast.makeText(this, "saved recording", Toast.LENGTH_SHORT).show();
-        setResult(RESULT_OK);
-        finish();
-    }
-
-    private void stopRecording() {
         myAudioRecorder.stop();
         myAudioRecorder.release();
         recording = false;
@@ -81,9 +90,16 @@ public class RecordActivity extends AppCompatActivity {
         stopB.setEnabled(false);
         recordB.setEnabled(true);
         title.setText(R.string.record_title);
+
+        Toast.makeText(this, "saved recording", Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK);
+        finish();
     }
 
 
+    /**
+     * The recording is stopped if the activity is paused.
+     */
     @Override
     public void onPause() {
         super.onPause();
