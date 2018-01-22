@@ -28,10 +28,10 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements FileRecyclerViewAdapter.ItemClickListener {
     private static final String FILE_PROVIDER = "com.example.uppgift33videostore.fileprovider";
     private static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
-    private static final int PERMISSION_REQUEST_MICROPHONE = 2;
-    private static final int REQUEST_AUDIO_CAPTURE = 200;
+    private static final int PERMISSION_REQUEST_CAMERA = 2;
+    private static final int REQUEST_VIDEO_CAPTURE = 200;
 
-    File[] audioList;
+    File[] videoList;
     RecyclerView filesRecycler;
     FileRecyclerViewAdapter filesGridAdapter;
 
@@ -53,13 +53,13 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
     }
 
     /**
-     * Initiates files recycler and its adapter with File references to the audio files.
+     * Initiates files recycler and its adapter with File references to the video files.
      */
     private void initFilesRecycler() {
         if (isExternalStorageWritable()) {
-            audioList = getAudioStorageDir().listFiles();
+            videoList = getVideoStorageDir().listFiles();
 
-            filesGridAdapter = new FileRecyclerViewAdapter(this, audioList);
+            filesGridAdapter = new FileRecyclerViewAdapter(this, videoList);
             filesGridAdapter.setClickListener(this);
 
             filesRecycler = findViewById(R.id.files_grid);
@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
     public boolean onOptionsItemSelected(MenuItem mi) {
         switch (mi.getItemId()) {
             case R.id.action_record:
-                if (!requestPermissionIfNone(Manifest.permission.RECORD_AUDIO, PERMISSION_REQUEST_MICROPHONE)) {
-                    dispatchRecordAudioIntent();
+                if (!requestPermissionIfNone(Manifest.permission.CAMERA, PERMISSION_REQUEST_CAMERA)) {
+                    dispatchRecordVideoIntent();
                 }
 
                 return true;
@@ -100,23 +100,23 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
 
 
     /**
-     * Starts the audio recording activity that then saves the recording to a file specified by createAudioFile().
+     * Starts the built in video recording activity that then saves the recording to a file specified by createVideoFile().
      */
-    private void dispatchRecordAudioIntent() {
+    private void dispatchRecordVideoIntent() { // TODO: start video recording act -------------------------------------------------
         Intent intent = new Intent(this, RecordActivity.class);
-        File file = createAudioFile();
+        File file = createVideoFile();
         intent.putExtra(RecordActivity.EXTRA_SOUND_FILE, file);
-        startActivityForResult(intent, REQUEST_AUDIO_CAPTURE);
+        startActivityForResult(intent, REQUEST_VIDEO_CAPTURE);
     }
 
     /**
-     * Creates a File, location of where the audio file will be saved.
+     * Creates a File, location of where the video file will be saved.
      *
      * @return File pointing at the new file location.
      */
-    private File createAudioFile() {
+    private File createVideoFile() { // TODO: --------------------------------------------------------------------------------------
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File storageDir = getAudioStorageDir();
+        File storageDir = getVideoStorageDir();
 
         return new File(storageDir, timeStamp + ".3gp");
     }
@@ -131,20 +131,20 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
 
-        Uri file = FileProvider.getUriForFile(this, FILE_PROVIDER, audioList[position]);
-        intent.setDataAndType(file, "audio/*")
+        Uri file = FileProvider.getUriForFile(this, FILE_PROVIDER, videoList[position]);
+        intent.setDataAndType(file, "audio/*") // TODO: "video/*" ------------------------------------------------------------------
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         startActivity(intent);
     }
 
     /**
-     * Used to get the storage-location of the audio files.
+     * Used to get the storage-location of the video files.
      *
-     * @return directory of the audio files
+     * @return directory of the video files
      */
-    public File getAudioStorageDir() {
-        return getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+    public File getVideoStorageDir() {
+        return getExternalFilesDir(Environment.DIRECTORY_MOVIES);
     }
 
     /**
@@ -191,13 +191,13 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
                 break;
             }
 
-            case PERMISSION_REQUEST_MICROPHONE:
+            case PERMISSION_REQUEST_CAMERA:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    dispatchRecordAudioIntent();
+                    dispatchRecordVideoIntent();
                 } else {
-                    Toast.makeText(this, "Can't record audio without permission", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Can't record video without permission", Toast.LENGTH_LONG).show();
                 }
                 break;
 
@@ -209,18 +209,18 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_AUDIO_CAPTURE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             updateFilesList();
         }
     }
 
     /**
-     * Updates the audioList with the newest listing of files in the directory and
+     * Updates the videoList with the newest listing of files in the directory and
      * makes sure that the adapter have the same list.
      */
     private void updateFilesList() {
-        audioList = getAudioStorageDir().listFiles();
-        filesGridAdapter.setFilesList(audioList);
+        videoList = getVideoStorageDir().listFiles();
+        filesGridAdapter.setFilesList(videoList);
     }
 
 }

@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/action_record"
-        android:icon="@drawable/ic_microphone"
+        android:icon="@drawable/ic_video_cam"
         android:title="@string/action_record_audio"
         app:showAsAction="ifRoom" />
 
