@@ -19,8 +19,8 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
     private ItemClickListener mClickListener;
 
     /**
-     * @param context Used to enable setting the previews inside the UI thread.
-     * @param files   sound files to show in the RecyclerView.
+     * @param context Used to get LayoutInflater
+     * @param files   video files to show in the RecyclerView.
      */
     FileRecyclerViewAdapter(Activity context, File[] files) {
         this.inflater = LayoutInflater.from(context);
@@ -44,7 +44,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
         final File file = files[position];
         String fileName = file.getName();
 
-        if (file.isFile() && fileName.endsWith(".3gp")) {
+        if (file.isFile() && fileName.endsWith(".3gp")) { // TODO: change file extension-------------------------------------------
             holder.image.setImageResource(R.drawable.ic_play);
             holder.text.setText(fileName);
         } else {
@@ -54,7 +54,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
     }
 
     /**
-     * @return Total number of items (audiofiles) to show.
+     * @return Total number of items (video files) to show.
      */
     @Override
     public int getItemCount() {
@@ -63,7 +63,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
 
 
     /**
-     * Sets the array of files and notifies that the dataset have changed. Useful when audio files have been added.
+     * Sets the array of files and notifies that the dataset have changed. Useful when video files have been added.
      *
      * @param filesList new listing of all files.
      */

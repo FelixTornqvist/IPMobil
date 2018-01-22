@@ -3,7 +3,7 @@
     package="com.example.uppgift33videostore">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -30,7 +30,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".RecordActivity"></activity>
     </application>
 
 </manifest>

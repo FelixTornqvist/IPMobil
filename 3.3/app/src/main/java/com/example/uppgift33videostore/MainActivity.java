@@ -103,10 +103,10 @@ public class MainActivity extends AppCompatActivity implements FileRecyclerViewA
      * Starts the built in video recording activity that then saves the recording to a file specified by createVideoFile().
      */
     private void dispatchRecordVideoIntent() { // TODO: start video recording act -------------------------------------------------
-        Intent intent = new Intent(this, RecordActivity.class);
-        File file = createVideoFile();
-        intent.putExtra(RecordActivity.EXTRA_SOUND_FILE, file);
-        startActivityForResult(intent, REQUEST_VIDEO_CAPTURE);
+//        Intent intent = new Intent(this, RecordActivity.class);
+//        File file = createVideoFile();
+//        intent.putExtra(RecordActivity.EXTRA_SOUND_FILE, file);
+//        startActivityForResult(intent, REQUEST_VIDEO_CAPTURE);
     }
 
     /**
