@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">uppgift 3.3 VideoStore</string>
+    <string name="filegrid_item_description">audio item</string>
+    <string name="action_record_audio">Record audio</string>
+    <string name="record_title">Record to</string>
+    <string name="recording_title">Recording to</string>
+    <string name="recording_stop">stop recording</string>
+    <string name="recording_start">start recording</string>
+</resources>
