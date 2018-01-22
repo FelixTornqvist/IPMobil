@@ -11,8 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/**
+ * Main Activity for task 4.1.2, a simple list with links that open in a WebView below.
+ */
 public class MainActivity extends AppCompatActivity {
-    private String[] websites = new String[] {
+    private String[] websites = new String[]{
             "https://www.google.com",
             "https://www.youtube.com",
             "https://www.dsv.su.se",
@@ -23,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter websitesArrAdapter;
     WebView webView;
 
+    /**
+     * Initializes a ListView with the links, with a listener attatched as well.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
         openWebSite(websites[0]);
     }
 
+    /**
+     * Sets up the WebView with correct settings
+     */
     private void setupWebView() {
         webView = findViewById(R.id.web_main);
         webView.setWebViewClient(new WebViewClient());
@@ -52,8 +61,13 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setSupportZoom(true);
     }
 
+    /**
+     * Opens specified website in the WebView
+     *
+     * @param link link to website to open
+     */
     private void openWebSite(String link) {
-        Toast.makeText(this, "opening "+link, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "opening " + link, Toast.LENGTH_SHORT).show();
         webView.loadUrl(link);
     }
 }

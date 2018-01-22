@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter ytLinkAdapter;
 
     /**
-     * Initializes a ListView with the links with a listener
+     * Initializes a ListView with the links, with a listener attatched as well.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
