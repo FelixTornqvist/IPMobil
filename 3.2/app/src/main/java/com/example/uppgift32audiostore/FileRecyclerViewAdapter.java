@@ -19,7 +19,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter<FileRecyclerVi
     private ItemClickListener mClickListener;
 
     /**
-     * @param context Used to enable setting the previews inside the UI thread.
+     * @param context Used to get LayoutInflater
      * @param files   sound files to show in the RecyclerView.
      */
     FileRecyclerViewAdapter(Activity context, File[] files) {
