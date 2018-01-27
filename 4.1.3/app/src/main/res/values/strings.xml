@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Mail Sender</string>
+    <string name="string_main_subject">Ämne</string>
+    <string name="string_main_recipent">Mottagare</string>
+    <string name="string_main_message">Meddelande</string>
+    <string name="string_main_choose_file">Bifoga fil</string>
+    <string name="string_main_send">Skicka</string>
+</resources>
