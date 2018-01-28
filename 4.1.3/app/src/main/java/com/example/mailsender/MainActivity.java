@@ -1,30 +1,28 @@
 package com.example.mailsender;
 
 import android.Manifest;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     EditText recipientET, subjectET, messageET;
     TextView chosenFileTW;
 
-    Uri attachment;
     File tmpFile;
 
     @Override
@@ -50,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
         chosenFileTW = findViewById(R.id.text_main_attatched_file);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        deleteTmpFile();
+    }
+
     /**
      * Listener for the attach file button, opens an file picker activity.
      *
@@ -62,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openFileChooserAct() {
-//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        deleteTmpFile();
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, RESULT_PICK_FILE);
@@ -80,14 +84,6 @@ public class MainActivity extends AppCompatActivity {
         String subject = subjectET.getText().toString();
         String message = messageET.getText().toString();
 
-//        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", recipient, null));
-////        emailIntent.setType("text/plain");
-////        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipient, "blabbernaut@gmail.com"});
-//        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-//        emailIntent.putExtra(Intent.EXTRA_TEXT, message);
-//
-////        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://path/to/email/attachment")); //TODO: enable this functionality!
-
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
@@ -98,15 +94,14 @@ public class MainActivity extends AppCompatActivity {
         PackageManager packageManager = getPackageManager();
         List<ResolveInfo> resInfoList = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
 
-        if (attachment != null) {
+        if (tmpFile != null) {
+            Uri fileUri = FileProvider.getUriForFile(this, FILES_AUTHORITY, tmpFile);
 
-            Uri uriToImage = FileProvider.getUriForFile(this, FILES_AUTHORITY, tmpFile);
-
-            intent.putExtra(Intent.EXTRA_STREAM, uriToImage);
+            intent.putExtra(Intent.EXTRA_STREAM, fileUri);
 
             for (ResolveInfo resolveInfo : resInfoList) {
                 String packageName = resolveInfo.activityInfo.packageName;
-                grantUriPermission(packageName, uriToImage, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                grantUriPermission(packageName, fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
         }
 
@@ -124,14 +119,15 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case RESULT_PICK_FILE:
-                attachment = data.getData();
-                chosenFileTW.setText(attachment.toString());
+                Uri chosenFile = data.getData();
+                String fileName = getFileName(chosenFile);
+                chosenFileTW.setText(fileName);
 
                 File outDir = getCacheDir();
                 try {
-                    tmpFile = File.createTempFile("attachment", ".jpg", outDir);
+                    tmpFile = new File(outDir, fileName);
 
-                    InputStream is = getContentResolver().openInputStream(attachment);
+                    InputStream is = getContentResolver().openInputStream(chosenFile);
                     byte[] buffer = new byte[is.available()];
                     is.read(buffer);
                     is.close();
@@ -146,6 +142,27 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
         }
+    }
+
+    private String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return result;
+    }
+
+    private void deleteTmpFile() {
+        if (tmpFile != null)
+            tmpFile.delete();
+        chosenFileTW.setText("");
     }
 
     /**
