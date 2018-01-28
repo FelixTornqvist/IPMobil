@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText recipientET, subjectET, messageET;
     TextView chosenFileTW;
+    ImageButton deleteTmpFileBTN;
 
     File tmpFile;
 
@@ -44,13 +46,21 @@ public class MainActivity extends AppCompatActivity {
         subjectET = findViewById(R.id.edit_main_subject);
         messageET = findViewById(R.id.edit_main_message);
 
-        chosenFileTW = findViewById(R.id.text_main_attatched_file);
+        chosenFileTW = findViewById(R.id.text_main_attached_file);
+        deleteTmpFileBTN = findViewById(R.id.button_main_delete_attached_file);
+
+        File tmpDir = getCacheDir();
+        File[] fileList = tmpDir.listFiles();
+        if (fileList.length > 0) {
+            tmpFile = fileList[0];
+            chosenFileTW.setText(tmpFile.getName());
+            deleteTmpFileBTN.setVisibility(ImageButton.VISIBLE);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        deleteTmpFile();
     }
 
     /**
@@ -122,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 Uri chosenFile = data.getData();
                 String fileName = getFileName(chosenFile);
                 chosenFileTW.setText(fileName);
+                deleteTmpFileBTN.setVisibility(ImageButton.VISIBLE);
 
                 File outDir = getCacheDir();
                 try {
@@ -159,10 +170,21 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
+
+    /**
+     * Listener for the button that deletes the attached file.
+     * @param v unused, but required to be able to register this method in layout file.
+     */
+    public void deleteTmpFile(View v) {
+        deleteTmpFile();
+    }
+
     private void deleteTmpFile() {
-        if (tmpFile != null)
-            tmpFile.delete();
+        for (File file : getCacheDir().listFiles())
+            file.delete();
+        tmpFile = null;
         chosenFileTW.setText("");
+        deleteTmpFileBTN.setVisibility(ImageButton.INVISIBLE);
     }
 
     /**
