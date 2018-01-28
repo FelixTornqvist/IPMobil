@@ -7,7 +7,7 @@
     tools:context="com.example.mailsender.MainActivity">
 
     <EditText
-        android:id="@+id/edit_main_recipent_addr"
+        android:id="@+id/edit_main_recipient_addr"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -25,10 +25,10 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/string_main_subject"
-        android:inputType="textPersonName"
+        android:inputType="textEmailSubject"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_main_recipent_addr" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_main_recipient_addr" />
 
     <EditText
         android:id="@+id/edit_main_message"
@@ -38,8 +38,9 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/string_main_message"
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/button_main_choose_file"
+        android:inputType="textAutoComplete|textMultiLine|textLongMessage"
+        android:singleLine="false"
+        app:layout_constraintBottom_toTopOf="@+id/text_main_file"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_main_subject" />
@@ -50,21 +51,49 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
+        android:onClick="choseFileBtnListener"
         android:text="@string/string_main_choose_file"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_main_send"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginLeft="8dp" />
 
     <Button
         android:id="@+id/button_main_send"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:onClick="sendBtnListener"
         android:text="@string/string_main_send"
         app:layout_constraintBottom_toBottomOf="@+id/button_main_choose_file"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button_main_choose_file"
-        app:layout_constraintTop_toTopOf="@+id/button_main_choose_file" />
+        app:layout_constraintTop_toTopOf="@+id/button_main_choose_file"
+        android:layout_marginRight="8dp" />
+
+    <TextView
+        android:id="@+id/text_main_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/string_main_attatchment"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/button_main_choose_file"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginLeft="8dp" />
+
+    <TextView
+        android:id="@+id/text_main_attatched_file"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/text_main_file"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_main_file"
+        app:layout_constraintTop_toTopOf="@+id/text_main_file" />
 </android.support.constraint.ConstraintLayout>

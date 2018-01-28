@@ -5,4 +5,5 @@
     <string name="string_main_message">Meddelande</string>
     <string name="string_main_choose_file">Bifoga fil</string>
     <string name="string_main_send">Skicka</string>
+    <string name="string_main_attatchment">Bifogad fil:</string>
 </resources>
