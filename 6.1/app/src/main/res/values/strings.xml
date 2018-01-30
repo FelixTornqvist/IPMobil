@@ -2,4 +2,7 @@
     <string name="app_name">Uppgift 6.1 ReCaller</string>
     <string name="string_main_call_no">Telefonnummer</string>
     <string name="string_main_call">ring</string>
+    <string name="string_all_dir_outgoing">utgående</string>
+    <string name="string_all_dir_incoming">inkommande</string>
+    <string name="string_all_dir_missed">missat</string>
 </resources>
