@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
 
     File tmpFile;
 
+    /**
+     * Sets the attachment to the one that was last used (it is stored in getCacheDir())
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +61,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
     /**
      * Listener for the attach file button, opens an file picker activity.
      *
@@ -74,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Opens activity for picking a file
+     */
     private void openFileChooserAct() {
         deleteTmpFile();
 
@@ -155,6 +156,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Gets filename for specified file Uri
+     * @param uri Uri to get filename for (assumes that it's a content:// uri)
+     * @return String with filename
+     */
     private String getFileName(Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {
@@ -179,6 +185,9 @@ public class MainActivity extends AppCompatActivity {
         deleteTmpFile();
     }
 
+    /**
+     * Deletes all files in the getCacheDir() directory and clears attachment filename text.
+     */
     private void deleteTmpFile() {
         for (File file : getCacheDir().listFiles())
             file.delete();

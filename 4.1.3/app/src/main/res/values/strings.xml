@@ -6,4 +6,5 @@
     <string name="string_main_choose_file">Bifoga fil</string>
     <string name="string_main_send">Skicka</string>
     <string name="string_main_attatchment">Bifogad fil:</string>
+    <string name="string_main_remove_attachment">ta bort bifogad fil</string>
 </resources>

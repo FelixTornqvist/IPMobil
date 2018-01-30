@@ -82,7 +82,8 @@
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="@+id/button_main_delete_attached_file"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button_main_delete_attached_file" />
+        app:layout_constraintTop_toTopOf="@+id/button_main_delete_attached_file"
+        android:layout_marginLeft="8dp" />
 
     <TextView
         android:id="@+id/text_main_attached_file"
@@ -107,5 +108,7 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/button_main_choose_file"
         app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:srcCompat="@android:drawable/ic_delete"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/string_main_remove_attachment" />
 </android.support.constraint.ConstraintLayout>
