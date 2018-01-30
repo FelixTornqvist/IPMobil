@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Uppgift 6.1 ReCaller</string>
+    <string name="string_main_call_no">Telefonnummer</string>
+    <string name="string_main_call">ring</string>
+</resources>
