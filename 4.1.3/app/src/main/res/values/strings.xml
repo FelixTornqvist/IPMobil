@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mail Sender</string>
+    <string name="app_name">Uppgift 4.1.3 MailSender</string>
     <string name="string_main_subject">Ämne</string>
     <string name="string_main_recipent">Mottagare</string>
     <string name="string_main_message">Meddelande</string>
