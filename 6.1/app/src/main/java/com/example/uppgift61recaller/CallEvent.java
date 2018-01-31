@@ -1,8 +1,5 @@
 package com.example.uppgift61recaller;
 
-import android.content.Context;
-import android.provider.CallLog;
-
 import java.util.Date;
 
 /**
