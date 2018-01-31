@@ -8,6 +8,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -16,6 +18,8 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_READ_CALL_LOG = 1;
+    private RecyclerView logList;
+    private LogAdapter logListAdapter;
 
     private ArrayList<CallEvent> logs = new ArrayList<>();
 
@@ -24,14 +28,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        logList = findViewById(R.id.recyclerview_main_calls);
+        logList.setLayoutManager(new LinearLayoutManager(this));
+        logListAdapter = new LogAdapter(this, logs);
+        logList.setAdapter(logListAdapter);
+
         if (!requestPermissionIfNone("android.permission.READ_CALL_LOG", PERMISSION_REQUEST_READ_CALL_LOG))
             fillLogList();
     }
 
     private void fillLogList() {
         getCallDetails();
-        for (CallEvent eve : logs)
-            Log.v("main", "Event: " + eve);
+        logListAdapter.notifyDataSetChanged();
     }
 
     private void getCallDetails() {
@@ -95,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
                     fillLogList();
                 } else {
-                    Toast.makeText(this, "PERMISSION DENIED?!?!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Needs your permission to read phone history", Toast.LENGTH_LONG).show();
                 }
                 break;
             }
