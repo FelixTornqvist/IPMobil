@@ -61,7 +61,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-            if (itemClickListener != null) itemClickListener.onItemClick(getAdapterPosition());
+            if (itemClickListener != null) itemClickListener.onLogItemClick(getAdapterPosition());
         }
     }
 
@@ -76,6 +76,6 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
      * Parent activity will implement this method to respond to click events.
      */
     public interface ItemClickListener {
-        void onItemClick(int position);
+        void onLogItemClick(int position);
     }
 }

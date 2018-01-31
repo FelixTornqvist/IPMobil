@@ -29,14 +29,13 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
         android:backgroundTint="@android:color/holo_green_light"
         android:contentDescription="@string/string_main_call"
+        android:onClick="callButtonListener"
         app:layout_constraintBottom_toBottomOf="@+id/edit_main_phone_no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edit_main_phone_no"
-        app:srcCompat="@android:drawable/stat_sys_phone_call"
-        android:layout_marginRight="8dp" />
+        app:srcCompat="@android:drawable/stat_sys_phone_call" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_main_calls"

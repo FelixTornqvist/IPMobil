@@ -1,7 +1,9 @@
 package com.example.uppgift61recaller;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.CallLog;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -11,39 +13,68 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LogAdapter.ItemClickListener {
     private static final int PERMISSION_REQUEST_READ_CALL_LOG = 1;
     private RecyclerView logList;
+    private EditText phoneNoInput;
+
     private LogAdapter logListAdapter;
+    private Cursor managedCursor;
 
     private ArrayList<CallEvent> logs = new ArrayList<>();
 
+    /**
+     * Gets reference to the RecyclerView and the phone number EditText, and asks
+     * the user for permission to read call log, if already permitted, fill the log list.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v("main", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        logListAdapter = new LogAdapter(this, logs);
+        logListAdapter.setClickListener(this);
+
         logList = findViewById(R.id.recyclerview_main_calls);
         logList.setLayoutManager(new LinearLayoutManager(this));
-        logListAdapter = new LogAdapter(this, logs);
         logList.setAdapter(logListAdapter);
 
-        if (!requestPermissionIfNone("android.permission.READ_CALL_LOG", PERMISSION_REQUEST_READ_CALL_LOG))
+        phoneNoInput = findViewById(R.id.edit_main_phone_no);
+
+        if (!requestPermissionIfNone("android.permission.READ_CALL_LOG", PERMISSION_REQUEST_READ_CALL_LOG)) {
             fillLogList();
+        }
     }
 
+    /**
+     * Closes cursor here, because the app crashes if closed before it is killed
+     */
+    public void onDestroy() {
+        super.onDestroy();
+        managedCursor.close();
+    }
+
+    /**
+     * Calls getCallDetails() and notifies the adapter for the log list.
+     */
     private void fillLogList() {
         getCallDetails();
         logListAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Fills the arraylist with CallEvent entries from the phone's call log
+     */
     private void getCallDetails() {
-        Cursor managedCursor = managedQuery(CallLog.Calls.CONTENT_URI, null,
+        managedCursor = managedQuery(CallLog.Calls.CONTENT_URI, null,
                 null, null, null);
         int numberC = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
         int typeC = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
@@ -55,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             String type = managedCursor.getString(typeC);
             String dateStr = managedCursor.getString(dateC);
             Date date = new Date(Long.valueOf(dateStr));
-            String duration = managedCursor.getString(durationC);
+            String duration = secondsToHMS(Integer.parseInt(managedCursor.getString(durationC)));
 
             String direction = "";
             switch (Integer.parseInt(type)) {
@@ -71,7 +102,24 @@ public class MainActivity extends AppCompatActivity {
             }
             logs.add(new CallEvent(number, duration, direction, date));
         }
-        managedCursor.close();
+    }
+
+    /**
+     * Converts seconds to a string with Hour:Minutes:Seconds format,
+     * excluding Hour-part if it is <= 0.
+     *
+     * @param inSeconds seconds to convert
+     * @return String with Hour:Minutes:Seconds format.
+     */
+    private String secondsToHMS(int inSeconds) {
+        int seconds = inSeconds % 60;
+        int inMinutes = inSeconds / 60;
+        int minutes = inMinutes % 60;
+        int inHours = inMinutes / 60;
+        if (inHours > 0)
+            return inHours + ":" + minutes + ":" + seconds;
+        else
+            return minutes + ":" + seconds;
     }
 
     /**
@@ -109,5 +157,36 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    /**
+     * Listener for the call button, calls the number specified in phoneNoInput.
+     * @param v Not used, required to register method in xml file.
+     */
+    public void callButtonListener(View v) {
+        String phoneNo = phoneNoInput.getText().toString();
+        startPhoneAct(phoneNo);
+    }
+
+    /**
+     * Listener for the call log items
+     *
+     * @param position The index of the item clicked.
+     */
+    @Override
+    public void onLogItemClick(int position) {
+        String number = logs.get(position).getNumber();
+        startPhoneAct(number);
+    }
+
+    /**
+     * Starts the phone's calling activity to make a call.
+     *
+     * @param number number to call
+     */
+    private void startPhoneAct(String number) {
+        Intent intent = new Intent("android.intent.action.DIAL",
+                Uri.parse("tel:" + number));
+        startActivity(intent);
     }
 }
