@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Uppgift 6.2 TextReceiver</string>
+    <string name="app_name">Uppgift 6.2b TextReceiver</string>
+    <string name="string_main_message_title_received">Senaste SMS meddelandet:</string>
+    <string name="string_main_message_title_waiting">Väntar på SMS…</string>
 </resources>

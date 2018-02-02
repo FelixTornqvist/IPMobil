@@ -11,10 +11,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_RECEIVE_SMS = 1;
+    private TextView msgTitleTW, messageTW;
+    MySmsReceiver smsReceiver;
 
     /**
      * Calls startSmsReceiver() after checking for permission for receiving SMS:s.
@@ -24,18 +27,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        msgTitleTW = findViewById(R.id.text_main_message_title);
+        messageTW = findViewById(R.id.text_main_message);
+
         if (!requestPermissionIfNone("android.permission.RECEIVE_SMS", PERMISSION_REQUEST_RECEIVE_SMS)) {
             startSmsReceiver();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (smsReceiver != null)
+            unregisterReceiver(smsReceiver);
     }
 
     /**
      * Starts the BroadcastReceiver that listens for broadcasts about new SMS:s.
      */
     private void startSmsReceiver() {
-        MySmsReceiver receiver = new MySmsReceiver();
+        smsReceiver = new MySmsReceiver();
         IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
-        registerReceiver(receiver, filter);
+        registerReceiver(smsReceiver, filter);
     }
 
     /**
@@ -75,25 +88,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * BroadcastReceiver that receives SMS broadcasts and updates the messageTW TextView.
+     */
     public class MySmsReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle b = intent.getExtras();
-            SmsMessage[] msgs;
             String message = "";
 
             if (b != null) {
                 Object[] pdus = (Object[]) b.get("pdus");
-                msgs = new SmsMessage[pdus.length];
 
-                for (int i = 0; i < msgs.length; i++) {
-                    msgs[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
-                    message += msgs[i].getMessageBody();
+                for (Object pdu : pdus) {
+                    message += SmsMessage.createFromPdu((byte[]) pdu).getMessageBody();
                 }
             }
 
-            Toast.makeText(context, "Message: "+message, Toast.LENGTH_LONG).show();
+            msgTitleTW.setText(R.string.string_main_message_title_received);
+            messageTW.setText(message);
         }
     }
 }
