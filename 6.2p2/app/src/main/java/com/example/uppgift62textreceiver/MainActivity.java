@@ -16,19 +16,25 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_RECEIVE_SMS = 1;
 
+    /**
+     * Calls startSmsReceiver() after checking for permission for receiving SMS:s.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (requestPermissionIfNone("android.permission.RECEIVE_SMS", PERMISSION_REQUEST_RECEIVE_SMS)) {
+        if (!requestPermissionIfNone("android.permission.RECEIVE_SMS", PERMISSION_REQUEST_RECEIVE_SMS)) {
             startSmsReceiver();
         }
     }
 
+    /**
+     * Starts the BroadcastReceiver that listens for broadcasts about new SMS:s.
+     */
     private void startSmsReceiver() {
         MySmsReceiver receiver = new MySmsReceiver();
-        IntentFilter filter = new IntentFilter(MySmsReceiver.class.getName());
+        IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
         registerReceiver(receiver, filter);
     }
 
