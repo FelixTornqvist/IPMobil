@@ -18,17 +18,27 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
     private ItemClickListener itemClickListener;
     private ArrayList<CallEvent> callEvents = new ArrayList<>();
 
+    /**
+     * @param context Needed to inflate layouts.
+     * @param callEvents ArrayList of all call events to be listed.
+     */
     public LogAdapter(Context context, ArrayList<CallEvent> callEvents) {
         this.callEvents = callEvents;
         this.inflater = LayoutInflater.from(context);
     }
 
+    /**
+     * Initiates ViewHolders that will be reused in the RecyclerView
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.item_callevent, parent, false);
         return new ViewHolder(v);
     }
 
+    /**
+     * Binds/Recycles ViewHolders by setting values of existing ViewHolder.
+     */
     @Override
     public void onBindViewHolder(ViewHolder h, int position) {
         CallEvent eve = callEvents.get(position);
@@ -38,6 +48,9 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
         h.duration.setText(eve.getDuration());
     }
 
+    /**
+     * @return The amount of CallEvent that are listed.
+     */
     @Override
     public int getItemCount() {
         return callEvents.size();
@@ -68,7 +81,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
     /**
      * Allows clicks events to be caught.
      */
-    void setClickListener(ItemClickListener itemClickListener) {
+    public void setClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 

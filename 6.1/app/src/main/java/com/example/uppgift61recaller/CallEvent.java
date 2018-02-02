@@ -2,14 +2,20 @@ package com.example.uppgift61recaller;
 
 import java.util.Date;
 
-/**
- * Created by felix on 2018-01-30.
- */
 
+/**
+ * Model class for storing data about a call event from the call logs.
+ */
 class CallEvent {
     private String number, duration, direction;
     private Date date;
 
+    /**
+     * @param number The number that was called or called this phone.
+     * @param duration The duration of the call.
+     * @param direction The direction of the call, either outgoing, incoming or missed.
+     * @param date The date that the call was made or received.
+     */
     public CallEvent(String number, String duration, String direction, Date date) {
         this.number = number;
         this.duration = duration;
@@ -17,38 +23,37 @@ class CallEvent {
         this.date = date;
     }
 
+    /**
+     * @return The number that was called or called this phone.
+     */
     public String getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
+    /**
+     * @return The duration of the call.
+     */
     public String getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
+    /**
+     * @return The direction of the call, either outgoing, incoming or missed.
+     */
     public String getDirection() {
         return direction;
     }
 
-    public void setDirection(String direction) {
-        this.direction = direction;
-    }
-
+    /**
+     * @return The date that the call was made or received.
+     */
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
+    /**
+     * @return String with all values for easy debugging.
+     */
     @Override
     public String toString() {
         return number + ", " + duration + ", " + direction + ", " + date;

@@ -20,6 +20,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * MainActivity for assignment 6.1 -- a call log viewer.
+ */
 public class MainActivity extends AppCompatActivity implements LogAdapter.ItemClickListener {
     private static final int PERMISSION_REQUEST_READ_CALL_LOG = 1;
     private RecyclerView logList;
