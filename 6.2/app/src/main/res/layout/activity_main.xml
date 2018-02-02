@@ -16,7 +16,8 @@
         app:layout_constraintBottom_toTopOf="@+id/button_main_send_sms"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_main_phone_no" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_main_phone_no"
+        android:maxLength="160"/>
 
     <Button
         android:id="@+id/button_main_send_sms"
