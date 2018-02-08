@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * MainActivity for assignment 7.1.1 - an app that demonstrates copy and paste
+ */
 public class MainActivity extends AppCompatActivity {
     private EditText toCopyET;
     private TextView pastedTW;
