@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(EXTRA_TOAST_MSG)) {
+            sendToast("got from notification:\n" + intent.getStringExtra(EXTRA_TOAST_MSG));
+        }
     }
 
     /**
