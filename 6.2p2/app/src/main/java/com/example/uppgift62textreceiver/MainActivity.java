@@ -35,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Unregisters the sms BroadcastReceiver when the app is closed.
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
