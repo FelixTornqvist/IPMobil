@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(EXTRA_TOAST_MSG)) {
-            sendToast("got from notification:\n" + intent.getStringExtra(EXTRA_TOAST_MSG));
+            sendToast("Fick intent från notis:\n" + intent.getStringExtra(EXTRA_TOAST_MSG));
         }
     }
 
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
     private void sendNotification(String msg) {
         NotificationCompat.Builder notBuildr = new NotificationCompat.Builder(this, NOTIFICATION_CH1_ID);
         notBuildr.setSmallIcon(R.drawable.ic_notification);
-        notBuildr.setContentTitle("You've made a notification!");
+        notBuildr.setContentTitle(getString(R.string.notification_title));
         notBuildr.setContentText(msg);
         notBuildr.setAutoCancel(true);
 

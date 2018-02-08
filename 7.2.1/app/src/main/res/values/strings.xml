@@ -6,4 +6,5 @@
     <string name="all_ok">OK</string>
     <string name="all_cancel">AVBRYT</string>
     <string name="main_dialog_notification_title">Text att skicka i notis</string>
+    <string name="notification_title">Du skickade:</string>
 </resources>
