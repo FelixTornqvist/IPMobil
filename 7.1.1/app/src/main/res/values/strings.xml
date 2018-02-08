@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Uppgift 7.1.1 CopyPaster</string>
+    <string name="string_main_copy">kopiera</string>
+    <string name="string_main_paste">klistra in</string>
+    <string name="string_main_pasted_title">Inklistrad text:</string>
+    <string name="string_main_edit_tocopy_hint">Text att kopiera</string>
 </resources>
