@@ -2,4 +2,8 @@
     <string name="app_name">Uppgift 7.2.1 Popup Madness</string>
     <string name="main_button_notification_dialog">skapa en notis</string>
     <string name="main_button_toast">skapa en toast</string>
+    <string name="main_dialog_toast_title">Meddelande att toasta</string>
+    <string name="all_ok">OK</string>
+    <string name="all_cancel">AVBRYT</string>
+    <string name="main_dialog_notification_title">Text att skicka i notis</string>
 </resources>
