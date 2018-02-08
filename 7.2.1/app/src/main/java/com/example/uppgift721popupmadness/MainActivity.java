@@ -15,6 +15,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * MainActivity for assignment 7.2.1 - an app that demonstrates Dialogs, Toasts and notifications.
+ */
 public class MainActivity extends AppCompatActivity {
     private static final String NOTIFICATION_CH1_ID = "channel_1";
     private static final String EXTRA_TOAST_MSG = "extra_toast_msg";
