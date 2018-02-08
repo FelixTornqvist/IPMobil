@@ -1,20 +1,14 @@
 package com.example.uppgift731connectionstatus;
 
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -25,12 +19,8 @@ import java.net.SocketAddress;
 public class MainActivity extends AppCompatActivity {
     private TextView connTW, internetTW;
 
-    // Connecting to internet requires a separate thread.
-    private HandlerThread thread = new HandlerThread("updaterHandlerThread");
+    private boolean updateRunner;
 
-    /**
-     * Starts thread that checks for connection and updates GUI.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,17 +28,38 @@ public class MainActivity extends AppCompatActivity {
 
         connTW = findViewById(R.id.text_main_conn_type);
         internetTW = findViewById(R.id.text_main_conn_internet);
+    }
 
+    /**
+     * Starts thread that checks for connection and updates the GUI.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateRunner = true;
+        HandlerThread thread = new HandlerThread("updaterHandlerThread");
         thread.start();
         final Handler statusUpdaterHandler = new Handler(thread.getLooper());
+
         Runnable statusUpdater = new Runnable() {
             @Override
             public void run() {
                 updateStatus();
-                statusUpdaterHandler.postDelayed(this, 5000);
+
+                if (updateRunner)
+                    statusUpdaterHandler.postDelayed(this, 3000);
             }
         };
         statusUpdaterHandler.post(statusUpdater);
+    }
+
+    /**
+     * Makes sure that the updater thread have stopped when the app pauses.
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        updateRunner = false;
     }
 
     /**
