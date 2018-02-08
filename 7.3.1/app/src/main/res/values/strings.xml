@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Uppgift 7.3.1 ConnectionStatus</string>
-    <string name="main_conn_desc">Anslutning:</string>
+    <string name="main_conn_type_desc">Anslutning:</string>
+    <string name="main_conn_disconnected">ingen anslutning</string>
     <string name="main_conn_online">online</string>
     <string name="main_conn_offline">offline</string>
+    <string name="main_internetconn_desc">Internet:</string>
 </resources>
