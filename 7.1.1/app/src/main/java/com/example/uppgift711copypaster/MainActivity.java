@@ -13,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    EditText toCopyET;
-    TextView pastedTW;
-    ClipboardManager clipboard;
+    private EditText toCopyET;
+    private TextView pastedTW;
+    private ClipboardManager clipboard;
 
 
     @Override
