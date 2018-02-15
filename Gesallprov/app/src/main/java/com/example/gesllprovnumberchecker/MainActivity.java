@@ -1,5 +1,8 @@
 package com.example.gesllprovnumberchecker;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -7,69 +10,73 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int PERMISISON_REQ_READ_PHONE_STATE = 1;
     public static final String EXTRA_SEARCH_FOR_NUMBER = "search_for_number";
 
     private WebView webSearch;
     private TextView callerTW;
+    private Button copyNoBTN;
+    private String numToCopy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        requestPermissionIfNone("android.permission.READ_PHONE_STATE", PERMISISON_REQ_READ_PHONE_STATE);
-
         webSearch = findViewById(R.id.web_main_number_search);
         callerTW = findViewById(R.id.text_main_caller);
+        copyNoBTN = findViewById(R.id.button_main_copy_number);
+
+        setupWebView();
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(EXTRA_SEARCH_FOR_NUMBER)) {
             setupForNumber(intent.getStringExtra(EXTRA_SEARCH_FOR_NUMBER));
+        } else {
+            Toast.makeText(this, "Error: no intent with number provided", Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 
+    /**
+     * Sets everything up so that they relate to a phone number.
+     * @param num Phone number to relate the view to.
+     */
     private void setupForNumber(String num) {
         callerTW.setText(getString(R.string.main_caller_number, num));
-
+        webSearch.loadUrl("https://www.hitta.se/vem-ringde/" + num);
+        numToCopy = num;
+        copyNoBTN.setEnabled(true);
     }
 
     /**
-     * Makes sure that a permission is granted by the user.
-     *
-     * @param permission  permission to grant.
-     * @param requestCode this int code is received in onRequestPermissionsResult() if the permission had to be requested.
-     * @return true if the permission have been requested, false if permission already granted.
+     * Sets up the WebView with correct settings
      */
-    private boolean requestPermissionIfNone(String permission, int requestCode) {
-        if (ContextCompat.checkSelfPermission(this, permission)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
-            return true;
-        }
-        return false;
+    private void setupWebView() {
+        webSearch.setWebViewClient(new WebViewClient());
+        WebSettings webSettings = webSearch.getSettings();
+
+        webSettings.setSupportZoom(true);
+        webSettings.setJavaScriptEnabled(true);
     }
 
     /**
-     * Deals with what should happen after the user have answered the permission question.
+     * Activates when the copy button have been pressed, copies the phone number that called to the clipboard.
+     * @param v not used, required to register listener in layout xml file.
      */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PERMISISON_REQ_READ_PHONE_STATE: {
-                // If request is cancelled, the result arrays are empty.
-                if (!(grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    Toast.makeText(this, "Needs your permission to check phone numbers", Toast.LENGTH_LONG).show();
-                }
-                break;
-            }
+    public void onCopyBtnListener(View v) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("simple text", numToCopy);
+        clipboard.setPrimaryClip(clip);
 
-        }
+        Toast.makeText(this, R.string.main_number_copied, Toast.LENGTH_SHORT).show();
     }
 }

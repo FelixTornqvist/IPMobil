@@ -1,5 +1,12 @@
 <resources>
-    <string name="app_name">Gesällprov numberChecker</string>
+    <string name="app_name">NumberChecker</string>
     <string name="main_copy_number">Kopiera nummer</string>
     <string name="main_caller_number">%1$s ringde</string>
+    <string name="main_number_copied">kopierade numret</string>
+    <string name="start_info_welcome">Välkommen till NumberChecker!</string>
+    <string name="start_info_message">
+        Denna app kör i bakgrunden och visar en notis när någon ringer som ger dig
+        möjligheten att direkt söka upp numret på hitta.se för att se vem det är som ringer.
+    </string>
+    <string name="start_number_permission_denied">Appen behöver din tillåtelse för att komma åt och söka nummer</string>
 </resources>
