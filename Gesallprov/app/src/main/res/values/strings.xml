@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Gesällprov numberChecker</string>
+    <string name="main_copy_number">Kopiera nummer</string>
+    <string name="main_caller_number">%1$s ringde</string>
+</resources>
