@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context="com.example.gesllprovnumberchecker.MainActivity">
+    tools:context="com.example.gesllprovnumberchecker.NumberSearchActivity">
 
     <TextView
         android:id="@+id/text_main_caller"

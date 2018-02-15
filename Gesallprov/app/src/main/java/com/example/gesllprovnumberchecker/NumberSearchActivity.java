@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class NumberSearchActivity extends AppCompatActivity {
     public static final String EXTRA_SEARCH_FOR_NUMBER = "search_for_number";
 
     private WebView webSearch;

@@ -30,8 +30,8 @@ public class PhoneCallReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Creates a notification that starts MainActivity with extra
-     * {@literal MainActivity.EXTRA_SEARCH_FOR_NUMBER} that contains number.
+     * Creates a notification that starts NumberSearchActivity with extra
+     * {@literal NumberSearchActivity.EXTRA_SEARCH_FOR_NUMBER} that contains number.
      * @param context Needed to make a notification.
      * @param number Number to send.
      */
@@ -42,11 +42,11 @@ public class PhoneCallReceiver extends BroadcastReceiver {
         notBuildr.setContentText("Tryck här för att söka på hitta.se");
         notBuildr.setAutoCancel(true);
 
-        Intent resultIntent = new Intent(context, MainActivity.class);
-        resultIntent.putExtra(MainActivity.EXTRA_SEARCH_FOR_NUMBER, number);
+        Intent resultIntent = new Intent(context, NumberSearchActivity.class);
+        resultIntent.putExtra(NumberSearchActivity.EXTRA_SEARCH_FOR_NUMBER, number);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addParentStack(NumberSearchActivity.class);
         stackBuilder.addNextIntent(resultIntent);
 
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
