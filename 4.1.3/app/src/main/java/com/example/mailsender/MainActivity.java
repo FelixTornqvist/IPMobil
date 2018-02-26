@@ -26,6 +26,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+/**
+ * Main activity for task 4.1.3 - an app that the user can compose an email and attach a file
+ * with, before starting a activity that can send it.
+ */
 public class MainActivity extends AppCompatActivity {
     private static final int RESULT_PICK_FILE = 1;
     private static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 2;
