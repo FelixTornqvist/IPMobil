@@ -13,8 +13,7 @@ import android.telephony.TelephonyManager;
  * Registered in the manifest with a filter that only gives it phone call broadcasts.
  */
 public class PhoneCallReceiver extends BroadcastReceiver {
-
-    private static final String NOTIFICATION_CH1_ID = "channel1";
+    public static final String NOTIFICATION_CH1_ID = "channel1";
     private static final int NOT1_NOTIFICATION_ID = 1;
 
     /**

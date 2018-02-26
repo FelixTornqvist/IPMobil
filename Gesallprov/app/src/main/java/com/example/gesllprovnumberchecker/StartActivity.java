@@ -1,5 +1,8 @@
 package com.example.gesllprovnumberchecker;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +21,16 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
 
         requestPermissionIfNone("android.permission.READ_PHONE_STATE", PERMISISON_REQ_READ_PHONE_STATE);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String channelName = getString(R.string.notification_channel_number_searches);
+            String channelDesc = getString(R.string.notification_channel_desc_number_searches);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(PhoneCallReceiver.NOTIFICATION_CH1_ID, channelName, importance);
+            channel.setDescription(channelDesc);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     /**
