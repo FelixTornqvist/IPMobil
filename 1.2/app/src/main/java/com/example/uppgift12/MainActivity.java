@@ -11,11 +11,17 @@ import android.widget.TimePicker;
 
 import java.util.ArrayList;
 
+/**
+ * Main activity for task 1.2 - an app demonstrating event handling
+ */
 public class MainActivity extends AppCompatActivity {
     static final String STATE_ALARM_TIMES = "alarmTimes";
     private ArrayList<Time> alarmTimes = new ArrayList<>();
     AlarmListFragment listFrag;
 
+    /**
+     * Adds fragment that handles the list.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
         listFrag.setAlarmTimesList(alarmTimes);
     }
 
+    /**
+     * Saves all the inputted alarmTimes so that they remain when rotating the device
+     */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putParcelableArrayList(STATE_ALARM_TIMES, alarmTimes);
