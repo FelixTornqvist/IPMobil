@@ -1,6 +1,7 @@
 package com.example.uppgift411YoutubeLinker;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * Main Activity for task 4.1.1, an app with links to YouTube videos.
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter ytLinkAdapter;
 
     /**
-     * Initializes a ListView with the links, with a listener attatched as well.
+     * Initializes a ListView with the links, with a listener attached as well.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
         Uri uri = Uri.parse(link);
         uri = Uri.parse("vnd.youtube:" + uri.getQueryParameter("v"));
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
+
+        PackageManager packageManager = getPackageManager();
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "No application for Youtube was found :'(", Toast.LENGTH_LONG).show();
+        }
     }
 }
