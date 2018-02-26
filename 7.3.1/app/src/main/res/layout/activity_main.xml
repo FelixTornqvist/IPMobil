@@ -15,7 +15,8 @@
         android:text="@string/main_conn_type_desc"
         android:textColor="@android:color/black"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="24dp" />
 
     <TextView
         android:id="@+id/text_main_conn_type"
@@ -23,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/text_main_conn_type_desc"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/text_main_conn_type_desc"
         app:layout_constraintStart_toEndOf="@+id/text_main_conn_type_desc"
         app:layout_constraintTop_toTopOf="@+id/text_main_conn_type_desc"
         android:layout_marginLeft="8dp" />
@@ -44,8 +45,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/text_main_conn_internet_desc"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/text_main_conn_internet_desc"
         app:layout_constraintStart_toEndOf="@+id/text_main_conn_internet_desc"
-        app:layout_constraintTop_toTopOf="@+id/text_main_conn_internet_desc" />
+        app:layout_constraintTop_toTopOf="@+id/text_main_conn_internet_desc"
+        android:layout_marginLeft="8dp" />
 
 </android.support.constraint.ConstraintLayout>
