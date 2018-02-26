@@ -130,26 +130,28 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case RESULT_PICK_FILE:
-                Uri chosenFile = data.getData();
-                String fileName = getFileName(chosenFile);
-                chosenFileTW.setText(fileName);
-                deleteTmpFileBTN.setVisibility(ImageButton.VISIBLE);
+                if (data != null) {
+                    Uri chosenFile = data.getData();
+                    String fileName = getFileName(chosenFile);
+                    chosenFileTW.setText(fileName);
+                    deleteTmpFileBTN.setVisibility(ImageButton.VISIBLE);
 
-                File outDir = getCacheDir();
-                try {
-                    tmpFile = new File(outDir, fileName);
+                    File outDir = getCacheDir();
+                    try {
+                        tmpFile = new File(outDir, fileName);
 
-                    InputStream is = getContentResolver().openInputStream(chosenFile);
-                    byte[] buffer = new byte[is.available()];
-                    is.read(buffer);
-                    is.close();
+                        InputStream is = getContentResolver().openInputStream(chosenFile);
+                        byte[] buffer = new byte[is.available()];
+                        is.read(buffer);
+                        is.close();
 
-                    OutputStream outStream = new FileOutputStream(tmpFile);
-                    outStream.write(buffer);
-                    outStream.close();
+                        OutputStream outStream = new FileOutputStream(tmpFile);
+                        outStream.write(buffer);
+                        outStream.close();
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 break;
