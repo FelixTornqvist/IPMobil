@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Opens specified link in YouTube app or gives the user options of what app to open if YouTube
-     * isn't installed.
+     * Opens specified link in YouTube app or gives the user an error if the youtube app was unavailable.
      * @param link YouTube link to open
      */
     private void openYTLink(String link) {
