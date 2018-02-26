@@ -11,10 +11,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+/**
+ * The starting activity for assignment 9 (Gesällprov)
+ * Asks for all of the permissions necessary to make this app work and displays
+ * a short description of what the app does.
+ */
 public class StartActivity extends AppCompatActivity {
     private static final int PERMISISON_REQ_READ_PHONE_STATE = 1;
 
 
+    /**
+     * Asks the user for permission to read the phone state (when the phone is ringing)
+     * and sets up a notification channel.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

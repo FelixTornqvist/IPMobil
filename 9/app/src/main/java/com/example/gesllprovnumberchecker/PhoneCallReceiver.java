@@ -10,7 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 
 /**
- * Registered in the manifest with a filter that only gives it phone call broadcasts.
+ * Receiver that's registered in the manifest with a filter that only gives it phone call broadcasts.
  */
 public class PhoneCallReceiver extends BroadcastReceiver {
     public static final String NOTIFICATION_CH1_ID = "channel1";

@@ -18,6 +18,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Activity that takes number from the extra in EXTRA_SEARCH_FOR_NUMBER and searches for it
+ * on hitta.se
+ */
 public class NumberSearchActivity extends AppCompatActivity {
     public static final String EXTRA_SEARCH_FOR_NUMBER = "search_for_number";
 
@@ -26,6 +30,10 @@ public class NumberSearchActivity extends AppCompatActivity {
     private Button copyNoBTN;
     private String numToCopy;
 
+    /** 
+     * Takes the number from the extra 'EXTRA_SEARCH_FOR_NUMBER' and searches for it
+     * on hitta.se
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
