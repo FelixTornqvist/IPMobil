@@ -36,7 +36,7 @@ public class PhoneCallReceiver extends BroadcastReceiver {
      */
     private void makeNotification(Context context, String number) {
         NotificationCompat.Builder notBuildr = new NotificationCompat.Builder(context, NOTIFICATION_CH1_ID);
-        notBuildr.setSmallIcon(R.drawable.ic_launcher_foreground);
+        notBuildr.setSmallIcon(R.drawable.ic_notification);
         notBuildr.setContentTitle(number + " ringer");
         notBuildr.setContentText("Tryck här för att söka på hitta.se");
         notBuildr.setAutoCancel(true);
