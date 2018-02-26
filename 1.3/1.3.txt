@@ -1,3 +1,5 @@
+--- How to create and sign an APK in Android Studio ---
+
 1. Build > Generate Signed APK
 2. Click "Create new..." button as I had no previous keys.
 3. Enter key store path (where to save the key store), I chose "/home/felix/keystores/android-IPMobil.jks"
