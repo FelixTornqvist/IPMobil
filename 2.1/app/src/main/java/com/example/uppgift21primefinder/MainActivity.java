@@ -43,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
         primeCalc = new PrimeCalc(currentCount, largestPrimeTW, currCountTW);
     }
 
+    /**
+     * Sets up the handling of the frequency slider and resumes the calculations.
+     */
     @Override
     protected void onStart() {
         super.onStart();

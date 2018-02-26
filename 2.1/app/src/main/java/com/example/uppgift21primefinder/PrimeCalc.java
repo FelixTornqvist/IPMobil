@@ -23,6 +23,9 @@ public class PrimeCalc extends Thread {
         this.currCountTW = currCountTW;
     }
 
+    /**
+     * Searches for prime numbers
+     */
     @Override
     public void run() {
         while (run) {
