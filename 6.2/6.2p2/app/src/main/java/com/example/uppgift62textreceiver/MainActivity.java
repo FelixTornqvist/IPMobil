@@ -14,6 +14,9 @@ import android.telephony.SmsMessage;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Main activity for assignment 6.2 -- the receiver part
+ */
 public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_RECEIVE_SMS = 1;
     private TextView msgTitleTW, messageTW;
