@@ -62,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements LogAdapter.ItemCl
      */
     public void onDestroy() {
         super.onDestroy();
-        managedCursor.close();
+        if (managedCursor != null)
+            managedCursor.close();
     }
 
     /**
