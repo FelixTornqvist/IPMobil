@@ -9,8 +9,14 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+/**
+ * Main activity for assignment 1.1 - an app demonstrating android UI components 
+ */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Fills the "todo-list" with string items
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
